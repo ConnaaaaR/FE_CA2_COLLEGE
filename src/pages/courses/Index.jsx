@@ -63,7 +63,7 @@ const Index = () => {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 			}
-			// Update the UI after successful deletion
+			// update liust
 			setCourses(
 				courses.filter((course) => !selectedCourses.includes(course.id))
 			);
@@ -190,7 +190,8 @@ const Index = () => {
 					<h2 className="text-3xl">All Courses</h2>
 
 					<div className="overflow-x-auto ">
-						<button onClick={openModal} className="btn btn-error flex-end">
+						<div className="flex-none"></div>
+						<button onClick={openModal} className="btn btn-error flex flex-1">
 							Delete Selected
 						</button>
 						<table className="table ">

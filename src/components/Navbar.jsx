@@ -27,7 +27,7 @@ const Navbar = () => {
 	return (
 		<>
 			<div className="navbar bg-base-100">
-				<div className="flex-none"></div>
+				
 				<div className="flex-1">
 					<Link to="/" className="btn btn-ghost text-xl">
 						class<span className="text-success-content">Coord</span>
