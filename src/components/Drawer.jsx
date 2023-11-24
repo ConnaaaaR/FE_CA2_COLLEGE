@@ -27,10 +27,10 @@ const Drawer = () => {
 					</li>
 					<h2 className="menu-title">Courses</h2>
 					<li>
-						<Link to="/courses">All Courses</Link>
+						<Link to="/courses">View All Courses</Link>
 					</li>
 					<li>
-						<Link to="/courses">All Courses</Link>
+						<Link to="/courses/create">Create New Course</Link>
 					</li>
 				</ul>
 			</div>

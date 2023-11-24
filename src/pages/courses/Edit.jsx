@@ -7,7 +7,13 @@ const Edit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [course, setCourse] = useState(null);
-	const [form, setForm] = useState({});
+	const [form, setForm] = useState({
+		title: "",
+		description: "",
+		code: "",
+		points: "",
+		level: "",
+	});
 	const [errors, setErrors] = useState();
 	const token = localStorage.getItem("token");
 
@@ -64,9 +70,10 @@ const Edit = () => {
 					},
 				})
 				.then((response) => {
-					navigate(`/courses/${id}`).catch((err) => {
-						console.error(err.response.data.message);
-					});
+					navigate(`/courses/${id}`);
+				})
+				.catch((err) => {
+					console.error(err.response.data.message);
 				});
 		}
 	};
