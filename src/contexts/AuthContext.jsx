@@ -8,7 +8,9 @@ export function useAuth() {
 }
 
 export function AuthProvider(props) {
-	const [authenticated, setAuthenticated] = useState(false);
+	const [authenticated, setAuthenticated] = useState(
+		Boolean(localStorage.getItem("token"))
+	);
 
 	return (
 		<AuthContext.Provider
@@ -19,7 +21,7 @@ export function AuthProvider(props) {
 
 					if (auth && token) {
 						localStorage.setItem("token", token);
-					} else if (auth) {
+					} else if (!auth) {
 						localStorage.removeItem("token");
 					}
 				},

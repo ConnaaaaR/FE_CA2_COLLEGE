@@ -1,9 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const RegisterForm = () => {
-	const [form, setForm] = useState(null);
+	const [form, setForm] = useState({
+		name: "name",
+		email: "email",
+		password: "password",
+		confirmPassword: "",
+	});
 	const [error, setError] = useState(null);
 	const { onAuthenticated } = useAuth();
 	const sendForm = () => {
@@ -19,6 +25,7 @@ const RegisterForm = () => {
 			})
 			.then((res) => {
 				onAuthenticated(true, res.data.token);
+				Navigate();
 			})
 			.catch((err) => {
 				console.error(err.response.data.message);
