@@ -3,6 +3,8 @@ import axios from "../../config/api";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
+import ConfirmationModal from "../../components/ConfirmationModal";
+
 const Index = () => {
 	const { authenticated } = useAuth();
 	const [courses, setCourses] = useState([]);
@@ -173,30 +175,17 @@ const Index = () => {
 	return (
 		<>
 			<main className="container mx-auto max-w-7xl my-5">
-				<div className={`modal ${isModalOpen ? "modal-open" : ""}`}>
-					<div className="modal-box">
-						<h3 className="font-bold text-lg">
-							Are you sure you want to delete the selected courses?
-						</h3>
+				{/* ################# MODAL ################# */}
+				<ConfirmationModal
+					isOpen={isModalOpen}
+					onClose={closeModal}
+					onConfirm={handleDeleteConfirmation}
+					title="Are you sure you want to delete the selected courses?"
+				>
+					Courses with enrollments will have their enrollments deleted as well.
+				</ConfirmationModal>
+				{/* ############### MODAL END ############### */}
 
-						<p className="py-4">
-							Courses with enrollments will have their enrollments deleted as
-							well.
-						</p>
-
-						<div className="modal-action">
-							<button
-								onClick={handleDeleteConfirmation}
-								className="btn btn-error"
-							>
-								Yes, Delete
-							</button>
-							<button onClick={closeModal} className="btn btn-outline">
-								Cancel
-							</button>
-						</div>
-					</div>
-				</div>
 				<section className=" bg-base-300 rounded-2xl p-5 ">
 					<h2 className="text-3xl">All Courses</h2>
 
