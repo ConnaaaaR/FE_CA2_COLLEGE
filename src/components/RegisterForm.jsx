@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 const RegisterForm = () => {
 	const [form, setForm] = useState(null);
 	const [error, setError] = useState(null);
-	const { onAuthenticaed } = useAuth();
+	const { onAuthenticated } = useAuth();
 	const sendForm = () => {
 		if (form.password !== form.confirmPassword) {
 			setError("Passwords Do Not Match!");
@@ -18,7 +18,7 @@ const RegisterForm = () => {
 				password: form.password,
 			})
 			.then((res) => {
-				onAuthenticaed(true, res.data.token);
+				onAuthenticated(true, res.data.token);
 			})
 			.catch((err) => {
 				console.error(err.response.data.message);

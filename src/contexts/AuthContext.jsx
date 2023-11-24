@@ -3,7 +3,7 @@ import { useContext, createContext, useState } from "react";
 const AuthContext = createContext(null);
 
 export function useAuth() {
-	const val = useContext(authContext);
+	const val = useContext(AuthContext);
 	return val;
 }
 
