@@ -7,8 +7,8 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 
 const Index = () => {
 	const { authenticated } = useAuth();
-	const [courses, setCourses] = useState([]);
-	const [selectedCourses, setSelectedCourses] = useState([]);
+	const [lecturers, setLecturers] = useState([]);
+	const [selectedLecturers, setSelectedLecturers] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,13 +19,13 @@ const Index = () => {
 	useEffect(() => {
 		setLoading(true);
 		axios
-			.get("/courses", {
+			.get("/lecturers", {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((response) => {
-				setCourses(response.data.data);
+				setLecturers(response.data.data);
 				setLoading(false);
 			})
 			.catch((err) => {
@@ -36,37 +36,41 @@ const Index = () => {
 
 	// debug useEffect for seeing deletion IDs
 	useEffect(() => {
-		console.log(selectedCourses);
-	}, [selectedCourses]);
+		console.log(selectedLecturers);
+	}, [selectedLecturers]);
 
-	const toggleCourseSelection = (courseId) => {
-		setSelectedCourses((prevSelectedCourses) =>
-			prevSelectedCourses.includes(courseId)
-				? prevSelectedCourses.filter((id) => id !== courseId)
-				: [...prevSelectedCourses, courseId]
+	const toggleLecturerSelection = (lecturerId) => {
+		setSelectedLecturers((prevSelectedLecturers) =>
+			prevSelectedLecturers.includes(lecturerId)
+				? prevSelectedLecturers.filter((id) => id !== lecturerId)
+				: [...prevSelectedLecturers, lecturerId]
 		);
 	};
 
-	const deleteEnrollmentsAndCourse = async () => {
+	const deleteEnrollmentsAndLecturer = async () => {
 		let token = localStorage.getItem("token");
-		// deletes enrollments, waits for it to complete and then deletes the course
+		// deletes enrollments, waits for it to complete and then deletes the lecturer
 		try {
-			for (const courseId of selectedCourses) {
-				const course = courses.find((c) => c.id === courseId);
-				for (const enrollment of course.enrolments) {
+			for (const lecturerId of selectedLecturers) {
+				const lecturer = lecturers.find((c) => c.id === lecturerId);
+				for (const enrollment of lecturer.enrolments) {
 					await axios.delete(`/enrolments/${enrollment.id}`, {
 						headers: { Authorization: `Bearer ${token}` },
 					});
 				}
-				await axios.delete(`/courses/${courseId}`, {
-					headers: { Authorization: `Bearer ${token}` },
-				});
+				await axios
+					.delete(`/lecturers/${lecturerId}`, {
+						headers: { Authorization: `Bearer ${token}` },
+					})
+					.catch((err) => {
+						console.log(err.response.data);
+					});
 			}
-			// update liust
-			setCourses(
-				courses.filter((course) => !selectedCourses.includes(course.id))
+
+			setLecturers(
+				lecturers.filter((lecturer) => !selectedLecturers.includes(lecturer.id))
 			);
-			setSelectedCourses([]);
+			setSelectedLecturers([]);
 		} catch (error) {
 			console.error("Deletion error:", error);
 		}
@@ -74,7 +78,7 @@ const Index = () => {
 
 	const handleDeleteConfirmation = () => {
 		closeModal();
-		deleteEnrollmentsAndCourse();
+		deleteEnrollmentsAndLecturer();
 	};
 
 	const SkeletonRow = () => {
@@ -111,20 +115,20 @@ const Index = () => {
 		<SkeletonRow key={index} />
 	));
 
-	if (!loading && courses.length === 0) return <h3>There are no courses!</h3>;
-	const coursesList = courses.map((course) => {
+	if (!loading && lecturers.length === 0) return <h3>There are no courses!</h3>;
+	const lecturerList = lecturers.map((lecturer) => {
 		return (
 			<>
 				{authenticated ? (
 					<>
-						<tr key={course.id}>
+						<tr key={lecturer.id}>
 							<th>
 								<label>
 									<input
 										type="checkbox"
 										className="checkbox checkbox-info"
-										checked={selectedCourses.includes(course.id)}
-										onChange={() => toggleCourseSelection(course.id)}
+										checked={selectedLecturers.includes(lecturer.id)}
+										onChange={() => toggleLecturerSelection(lecturer.id)}
 									/>
 								</label>
 							</th>
@@ -132,31 +136,37 @@ const Index = () => {
 							<td>
 								<div className="flex items-center gap-3 ">
 									<div>
-										<div className="font-bold ">{course.title}</div>
-										<div className="text-sm opacity-50">
-											{course.code} | {course.id}
-										</div>
+										<div className="font-bold ">{lecturer.name}</div>
 									</div>
 								</div>
 							</td>
-							<td className="">
-								{course.description}
+							<td>
+								{lecturer.email}
 								<br />
 								<span className="badge badge-base-100 badge-sm">
-									<b>Points:&nbsp; </b>
-									{course.points}
+									<b>id:&nbsp; </b>
+									{lecturer.id}
 								</span>
 							</td>
-							<td className="">{course.level}</td>
+							<td>
+								{lecturer.phone}
+
+								<br />
+								<span className="badge badge-base-100 badge-sm">
+									<b>id:&nbsp; </b>
+									{lecturer.id}
+								</span>
+							</td>
+
 							<th>
-								<Link to={`/courses/${course.id}`}>
+								<Link to={`/lecturer/${lecturer.id}`}>
 									<button className="btn btn-square btn-ghost btn-sm ">
 										details
 									</button>
 								</Link>
 							</th>
 							<th>
-								<Link to={`/courses/${course.id}/edit`}>
+								<Link to={`/lecturer/${lecturer.id}/edit`}>
 									<button className="btn btn-warning btn-sm ">edit</button>
 								</Link>
 							</th>
@@ -164,7 +174,7 @@ const Index = () => {
 					</>
 				) : (
 					<p>
-						<b>Title: </b> {course.title}
+						<b>Title: </b> {lecturer.name}
 					</p>
 				)}
 			</>
@@ -179,9 +189,10 @@ const Index = () => {
 					isOpen={isModalOpen}
 					onClose={closeModal}
 					onConfirm={handleDeleteConfirmation}
-					title="Are you sure you want to delete the selected courses?"
+					title="Are you sure you want to delete the selected lecturers?"
 				>
-					Courses with enrollments will have their enrollments deleted as well.
+					lecturers with enrollments will have their enrollments deleted as
+					well.
 				</ConfirmationModal>
 				{/* ############### MODAL END ############### */}
 
@@ -198,13 +209,13 @@ const Index = () => {
 								<tr>
 									<th>Select</th>
 									<th>Name</th>
-									<th>Description</th>
-									<th>Level</th>
+									<th>Email</th>
+									<th>Phone</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody className="prose">
-								{loading ? courseSkeletons : coursesList}
+								{loading ? courseSkeletons : lecturerList}
 							</tbody>
 						</table>
 					</div>

@@ -6,33 +6,33 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 const Show = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [course, setCourse] = useState(null);
+	const [lecturer, setLecturer] = useState(null);
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
 
 	useEffect(() => {
 		axios
-			.get(`/courses/${id}`, {
+			.get(`/lecturers/${id}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((response) => {
 				console.log(response.data.data);
-				setCourse(response.data.data);
+				setLecturer(response.data.data);
 			})
 			.catch((err) => {
 				console.error(err.response.data.message);
 			});
 	}, [id]);
 
-	if (!course) return <h3>Course Not found!</h3>;
+	if (!lecturer) return <h3>lecturer Not found!</h3>;
 
-	const enrolmentList = course.enrolments.map((person) => {
+	const enrolmentList = lecturer.enrolments.map((enrollment) => {
 		return (
 			<>
 				{authenticated ? (
-					<div key={person.id}>
+					<div key={enrollment.id}>
 						<tr>
 							<th>
 								<label>
@@ -43,15 +43,8 @@ const Show = () => {
 							<td>
 								<div className="flex items-center gap-3 ">
 									<div>
-										<div className="font-bold ">{person.status} </div>
-										<div className="text-sm opacity-50">{person.id}</div>
-									</div>
-								</div>
-							</td>
-							<td>
-								<div className="flex items-center gap-3 ">
-									<div>
-										<div className="font-bold ">{person.lecturer.name}</div>
+										<div className="font-bold ">{enrollment.status} </div>
+										<div className="text-sm opacity-50">{enrollment.id}</div>
 									</div>
 								</div>
 							</td>
@@ -59,7 +52,7 @@ const Show = () => {
 					</div>
 				) : (
 					<p>
-						<b>Title: </b> {course.title}
+						<b>Title: </b> {lecturer.title}
 					</p>
 				)}
 			</>
@@ -68,23 +61,21 @@ const Show = () => {
 
 	return (
 		<div>
-			<main className="container mx-auto max-w-7xl my-5">
-				<section className="bg-base-300 rounded-2xl p-5">
+			<main className="container mx-auto max-w-7xl my-5  ">
+				<section className="flex  sm:flex-col  justify-evenly gap-2 bg-primary rounded-2xl p-5 items-center  ">
 					<div className="card w-96 bg-base-100 shadow-xl">
 						<div className="card-body">
-							<h2 className="card-title">{course.title}</h2>
+							<h2 className="card-title">{lecturer.name}</h2>
 							<div className="badge badge-outline badge-secondary">
-								{course.code}
+								{lecturer.email}
 							</div>
-							<p>{course.description}</p>
-							<div className="badge badge-secondary">
-								Points: {course.points}
-							</div>
+							<p>{lecturer.address}</p>
+							<div className="badge badge-secondary">{lecturer.phone}</div>
 
 							<div className="card-actions justify-end">
 								<button className="btn btn-error">Delete</button>
 								<button className="btn  btn-warning">
-									<Link to={`/courses/${id}/edit`}>Edit</Link>
+									<Link to={`/lecturers/${id}/edit`}>Edit</Link>
 								</button>
 							</div>
 						</div>
