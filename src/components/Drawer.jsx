@@ -44,6 +44,13 @@ const Drawer = () => {
 							<li>
 								<Link to="/lecturer/create">Create New Lecturer</Link>
 							</li>
+							<h2 className="menu-title">Enrolments</h2>
+							<li>
+								<Link to="/enrolments">View All Enrolments</Link>
+							</li>
+							<li>
+								<Link to="/enrolment/create">Create New Enrolment</Link>
+							</li>
 						</>
 					) : null}
 				</ul>
