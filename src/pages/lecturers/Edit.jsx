@@ -1,38 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../config/api";
 
 const Edit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [course, setCourse] = useState(null);
+	const [lecturer, setLecturer] = useState(null);
 	const [form, setForm] = useState({
-		title: "",
-		description: "",
-		code: "",
-		points: "",
-		level: "",
+		name: "",
+		address: "",
+		phone: "",
+		email: "",
 	});
 	const [errors, setErrors] = useState();
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
 		axios
-			.get(`/courses/${id}`, {
+			.get(`/lecturers/${id}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((response) => {
-				setCourse(response.data.data);
-				setForm(response.data.data);
+				setLecturer(response.data.data);
+				setForm({
+					...form,
+					name: response.data.data.name,
+					address: response.data.data.address,
+					phone: response.data.data.phone,
+					email: response.data.data.email,
+				});
 			})
 			.catch((err) => {
 				console.error(err.response.data);
 				setErrors(err.response.data.message);
 			});
-	}, [id]);
+	}, [id, token]);
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
@@ -42,98 +46,87 @@ const Edit = () => {
 	};
 
 	const isRequired = (fields) => {
-		let inc = true;
-		setErrors({});
+		let isValid = true;
+		let newErrors = {};
 
 		fields.forEach((field) => {
 			if (!form[field]) {
-				inc = false;
-				setErrors((prevState) => ({
-					...prevState,
-					[field]: {
-						message: `${field} is required!`,
-					},
-				}));
+				isValid = false;
+				newErrors[field] = `${field} is required!`;
 			}
 		});
-		return inc;
+
+		setErrors(newErrors);
+		return isValid;
 	};
 
 	const submitForm = (e) => {
 		e.preventDefault();
 
-		if (isRequired(["title", "description", "code", "points", "level"])) {
+		if (isRequired(["name", "address", "phone", "email"])) {
 			axios
-				.put(`/courses/${id}`, form, {
+				.put(`/lecturer/${id}`, form, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				})
 				.then((response) => {
-					navigate(`/courses/${id}`);
+					navigate(`/lecturers/${id}`);
 				})
 				.catch((err) => {
 					console.error(err.response.data.message);
+					setErrors(err.response.data);
 				});
 		}
 	};
 
-	if (!course) return <h3>Course not found!</h3>;
+	if (!lecturer) return <h3>Course not found!</h3>;
 
 	return (
 		<form onSubmit={submitForm}>
 			<div>
-				title:{" "}
+				Name:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
 					onChange={handleForm}
-					value={form.title}
-					name="title"
+					value={form.name}
+					name="name"
 				/>
 			</div>
 			<div>
-				description:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
+				Address:{" "}
+				<textarea
+					className="textarea textarea-bordered h-40 w-full max-w-xs"
 					type="text"
 					onChange={handleForm}
-					value={form.description}
-					name="description"
+					value={form.address}
+					name="address"
 				/>
 			</div>
 			<div>
-				code:{" "}
+				Phone:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
 					onChange={handleForm}
-					value={form.code}
-					name="code"
+					value={form.phone}
+					name="phone"
 				/>
 			</div>
 			<div>
-				points:{" "}
+				Email:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
 					onChange={handleForm}
-					value={form.points}
-					name="points"
+					value={form.email}
+					name="email"
 				/>
 			</div>
-			<div>
-				level:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.level}
-					name="level"
-				/>
-			</div>
+
 			<button type="submit" className="btn btn-outline">
-				Submit
+				Update Lecturer
 			</button>
 		</form>
 	);

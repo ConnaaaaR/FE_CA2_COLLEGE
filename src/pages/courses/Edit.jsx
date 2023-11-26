@@ -94,9 +94,9 @@ const Edit = () => {
 			</div>
 			<div>
 				description:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
+				<textarea
+					className="textarea h-40 textarea-bordered w-full max-w-xs"
+					type="textarea"
 					onChange={handleForm}
 					value={form.description}
 					name="description"

@@ -6,7 +6,7 @@ import axios from "../../config/api";
 const Create = () => {
 	const navigate = useNavigate();
 	const [form, setForm] = useState({});
-	const [errors, setErrors] = useState();
+	const [errors, setErrors] = useState({});
 	const token = localStorage.getItem("token");
 
 	const handleForm = (e) => {
@@ -16,6 +16,11 @@ const Create = () => {
 		}));
 	};
 
+	const validatePhoneFormat = (phone) => {
+		const regex = /^\d{3}-\d{7}$/;
+		return regex.test(phone);
+	};
+
 	const isRequired = (fields) => {
 		const validationErrors = {};
 		let isValid = true;
@@ -23,7 +28,10 @@ const Create = () => {
 		fields.forEach((field) => {
 			if (!form[field]) {
 				isValid = false;
-				validationErrors[field] = { message: `${field} is required!` };
+				validationErrors[field] = `${field} is required!`;
+			} else if (field === "phone" && !validatePhoneFormat(form.phone)) {
+				isValid = false;
+				validationErrors[field] = `Phone number must be in xxx-xxxxxxx format!`;
 			}
 		});
 
@@ -72,16 +80,21 @@ const Create = () => {
 					name="address"
 				/>
 			</div>
+			{errors.email && <span className="text-error">{errors.email}</span>}
 			<div>
-				phone:{" "}
+				Phone:{" "}
 				<input
+					id="phone"
 					className="input input-bordered w-full max-w-xs"
-					type="number"
+					type="text"
 					onChange={handleForm}
 					value={form.phone}
 					name="phone"
+					placeholder="123-4567890"
+					required
 				/>
 			</div>
+			{errors.phone && <span className="text-error">{errors.phone}</span>}
 			<div>
 				email:{" "}
 				<input

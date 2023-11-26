@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
+import SkeletonRow from "../../components/SkeletonRow";
 
 const Index = () => {
 	const { authenticated } = useAuth();
@@ -76,7 +77,6 @@ const Index = () => {
 		closeModal();
 		deleteEnrollmentsAndCourse();
 	};
-
 
 	const courseSkeletons = [...Array(15)].map((_, index) => (
 		// value param is never used thus is named '_'
