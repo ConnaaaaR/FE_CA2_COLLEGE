@@ -32,9 +32,7 @@ const Navbar = () => {
 					<Link to="/" className="btn btn-ghost text-xl">
 						class<span className="text-success-content">Coord</span>
 					</Link>
-					{/* <Link to="/courses" className="btn btn-ghost text-xl">
-						Courses
-					</Link> */}
+				
 				</div>
 				<div className="flex-none gap-8">
 					<div className="flex-none gap-8">
