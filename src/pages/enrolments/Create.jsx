@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import axios from "../../config/api";
 
 const Create = () => {
@@ -16,7 +15,6 @@ const Create = () => {
 	const [courses, setCourses] = useState([]);
 	const [lecturers, setLecturers] = useState([]);
 	const token = localStorage.getItem("token");
-	const [date, setDate] = useState();
 
 	useEffect(() => {
 		axios
@@ -52,28 +50,7 @@ const Create = () => {
 		}));
 	};
 
-	const getTimestamp = () => {
-		let timeStr = new Date(Date.now() * 1000).toLocaleTimeString();
-		console.log(timeStr);
-		setDate(timeStr);
-	};
-
-	const isRequired = (fields) => {
-		const validationErrors = {};
-		let isValid = true;
-
-		fields.forEach((field) => {
-			if (!form[field]) {
-				isValid = false;
-				validationErrors[field] = { message: `${field} is required!` };
-			}
-		});
-
-		setErrors(validationErrors);
-		return isValid;
-	};
-
-	const submitForm = (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
 		axios
 			.post("/enrolments", form, {
@@ -92,10 +69,6 @@ const Create = () => {
 				}
 			});
 	};
-
-	useEffect(() => {
-		getTimestamp();
-	}, []);
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -162,17 +135,6 @@ const Create = () => {
 				{errors.lecturer_id && (
 					<span className="text-error">{errors.lecturer_id}</span>
 				)}
-			</div>
-			<div>
-				Time Stamp:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="email"
-					onChange={handleForm}
-					value={date}
-					name="time"
-					disabled
-				/>
 			</div>
 			<button type="submit">Create Enrolment</button>
 		</form>
