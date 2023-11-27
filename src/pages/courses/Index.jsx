@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
+import AlertBanner from "../../components/AlertBanner";
 import SkeletonRow from "../../components/SkeletonRow";
 
 const Index = () => {
@@ -12,9 +13,13 @@ const Index = () => {
 	const [selectedCourses, setSelectedCourses] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isAlertOpen, setIsAlertOpen] = useState(false);
 
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
+
+	const openAlert = () => setIsAlertOpen(true);
+	const closeAlert = () => setIsAlertOpen(false);
 	let token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -49,7 +54,6 @@ const Index = () => {
 	};
 
 	const deleteEnrollmentsAndCourse = async () => {
-		let token = localStorage.getItem("token");
 		// deletes enrollments, waits for it to complete and then deletes the course
 		try {
 			for (const courseId of selectedCourses) {
@@ -63,7 +67,7 @@ const Index = () => {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 			}
-			// update liust
+			// update list
 			setCourses(
 				courses.filter((course) => !selectedCourses.includes(course.id))
 			);
@@ -75,6 +79,7 @@ const Index = () => {
 
 	const handleDeleteConfirmation = () => {
 		closeModal();
+		openAlert();
 		deleteEnrollmentsAndCourse();
 	};
 
@@ -94,7 +99,7 @@ const Index = () => {
 								<label>
 									<input
 										type="checkbox"
-										className="checkbox checkbox-info"
+										className="checkbox opacity-50"
 										checked={selectedCourses.includes(course.id)}
 										onChange={() => toggleCourseSelection(course.id)}
 									/>
@@ -122,14 +127,12 @@ const Index = () => {
 							<td className="">{course.level}</td>
 							<th>
 								<Link to={`/courses/${course.id}`}>
-									<button className="btn btn-square btn-ghost btn-sm ">
-										details
-									</button>
+									<button className="btn btn-secondary btn-sm ">Details</button>
 								</Link>
 							</th>
 							<th>
 								<Link to={`/courses/${course.id}/edit`}>
-									<button className="btn btn-warning btn-sm ">edit</button>
+									<button className="btn btn-warning btn-sm ">Edit</button>
 								</Link>
 							</th>
 						</tr>
@@ -155,9 +158,14 @@ const Index = () => {
 				>
 					Courses with enrollments will have their enrollments deleted as well.
 				</ConfirmationModal>
+				<AlertBanner
+					isOpen={isAlertOpen}
+					onClose={closeAlert}
+					title="Entries Deleted Successfully"
+				/>
 				{/* ############### MODAL END ############### */}
 
-				<section className=" bg-base-300 rounded-2xl p-5 ">
+				<section className=" bg-base-300 rounded-2xl my-2 p-5 ">
 					<h2 className="text-3xl">All Courses</h2>
 
 					<div className="overflow-x-auto ">

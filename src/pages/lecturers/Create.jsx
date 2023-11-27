@@ -17,7 +17,7 @@ const Create = () => {
 	};
 
 	const validatePhoneFormat = (phone) => {
-		const regex = /^\d{3}-\d{7}$/;
+		const regex = /0\d{2}-\d{7}$/;
 		return regex.test(phone);
 	};
 
@@ -31,7 +31,7 @@ const Create = () => {
 				validationErrors[field] = `${field} is required!`;
 			} else if (field === "phone" && !validatePhoneFormat(form.phone)) {
 				isValid = false;
-				validationErrors[field] = `Phone number must be in xxx-xxxxxxx format!`;
+				validationErrors[field] = `Phone number must be in 0xx-xxxxxxx format!`;
 			}
 		});
 
@@ -90,7 +90,7 @@ const Create = () => {
 					onChange={handleForm}
 					value={form.phone}
 					name="phone"
-					placeholder="123-4567890"
+					placeholder="0xx-xxxxxxx"
 					required
 				/>
 			</div>
