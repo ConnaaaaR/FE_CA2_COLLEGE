@@ -24,7 +24,7 @@ const Create = () => {
 				},
 			})
 			.then((response) => {
-				setCourses(response.data);
+				setCourses(response.data.data);
 			})
 			.catch((error) => {
 				console.error("Error fetching courses", error);
@@ -36,7 +36,7 @@ const Create = () => {
 				},
 			})
 			.then((response) => {
-				setLecturers(response.data);
+				setLecturers(response.data.data);
 			})
 			.catch((error) => {
 				console.error("Error fetching lecturers", error);
@@ -104,57 +104,38 @@ const Create = () => {
 				</select>
 				{errors.status && <span className="text-error">{errors.status}</span>}
 			</div>
-			{() => {
-				if (courses.length === 0) {
-					return <h3>There are no courses!</h3>;
-				} else {
-					return (
-						<div>
-							<label>Course:</label>
-							<select
-								name="course_id"
-								value={form.course_id}
-								onChange={handleForm}
-							>
-								<option value="">Select a Course</option>
-								{courses.data.map((course) => (
-									<option key={course.id} value={course.id}>
-										{course.title}
-									</option>
-								))}
-							</select>
-							{errors.course_id && (
-								<span className="text-error">{errors.course_id}</span>
-							)}
-						</div>
-					);
-				}
-			}}
-			{() => {
-				if (lecturers.length === 0) {
-					return <h3>There are no lecturers!</h3>;
-				} else {
-					<div>
-						<label>Lecturer:</label>
-						<select
-							name="lecturer_id"
-							value={form.lecturer_id}
-							onChange={handleForm}
-						>
-							<option value="">Select a Lecturer</option>
-							{lecturers.map((lecturer) => (
-								<option key={lecturer.id} value={lecturer.id}>
-									{lecturer.name}
-								</option>
-							))}
-						</select>
-						{errors.lecturer_id && (
-							<span className="text-error">{errors.lecturer_id}</span>
-						)}
-					</div>;
-				}
-			}}
-
+			<div>
+				<label>Course:</label>
+				<select name="course_id" value={form.course_id} onChange={handleForm}>
+					<option value="">Select a Course</option>
+					{courses.map((course) => (
+						<option key={course.id} value={course.id}>
+							{course.title}
+						</option>
+					))}
+				</select>
+				{errors.course_id && (
+					<span className="text-error">{errors.course_id}</span>
+				)}
+			</div>
+			<div>
+				<label>Lecturer:</label>
+				<select
+					name="lecturer_id"
+					value={form.lecturer_id}
+					onChange={handleForm}
+				>
+					<option value="">Select a Lecturer</option>
+					{lecturers.map((lecturer) => (
+						<option key={lecturer.id} value={lecturer.id}>
+							{lecturer.name}
+						</option>
+					))}
+				</select>
+				{errors.lecturer_id && (
+					<span className="text-error">{errors.lecturer_id}</span>
+				)}
+			</div>
 			<button type="submit">Create Enrolment</button>
 		</form>
 	);
