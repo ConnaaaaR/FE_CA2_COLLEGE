@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
 import SkeletonRow from "../../components/SkeletonRow";
+import AlertBanner from "../../components/AlertBanner";
 
 const Index = () => {
 	const { authenticated } = useAuth();
@@ -12,9 +13,14 @@ const Index = () => {
 	const [selectedEnrolments, setSelectedEnrolments] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isAlertOpen, setIsAlertOpen] = useState(false);
 
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
+
+	const openAlert = () => setIsAlertOpen(true);
+	const closeAlert = () => setIsAlertOpen(false);
+
 	let token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -115,6 +121,11 @@ const Index = () => {
 					onClose={closeModal}
 					onConfirm={handleDeleteConfirmation}
 					title="Are you sure you want to delete the selected enrolments?"
+				/>
+				<AlertBanner
+					isOpen={isAlertOpen}
+					onClose={closeAlert}
+					title="Entries Deleted Successfully"
 				/>
 				<section className="bg-base-300 rounded-2xl p-5">
 					<h2 className="text-3xl">All Enrolments</h2>

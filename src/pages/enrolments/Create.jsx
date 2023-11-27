@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import axios from "../../config/api";
 
@@ -8,12 +8,19 @@ const Create = () => {
 	const [form, setForm] = useState({});
 	const [errors, setErrors] = useState();
 	const token = localStorage.getItem("token");
+	const [date, setDate] = useState();
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
 		}));
+	};
+
+	const getTimestamp = () => {
+		let timeStr = new Date(Date.now() * 1000).toLocaleTimeString();
+		console.log(timeStr);
+		setDate(timeStr);
 	};
 
 	const isRequired = (fields) => {
@@ -42,13 +49,17 @@ const Create = () => {
 					},
 				})
 				.then((response) => {
-					navigate(`/lecturers`);
+					navigate(`/enrolments`);
 				})
 				.catch((err) => {
 					console.error(err.response.data);
 				});
 		}
 	};
+
+	useEffect(() => {
+		getTimestamp();
+	}, []);
 
 	return (
 		<form onSubmit={submitForm}>
@@ -90,6 +101,17 @@ const Create = () => {
 					onChange={handleForm}
 					value={form.email}
 					name="email"
+				/>
+			</div>
+			<div>
+				Time Stamp:{" "}
+				<input
+					className="input input-bordered w-full max-w-xs"
+					type="email"
+					onChange={handleForm}
+					value={date}
+					name="time"
+					disabled
 				/>
 			</div>
 
