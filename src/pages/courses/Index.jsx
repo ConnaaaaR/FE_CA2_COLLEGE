@@ -4,22 +4,21 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { useAlert } from "../../contexts/AlertContext";
 import AlertBanner from "../../components/AlertBanner";
 import SkeletonRow from "../../components/SkeletonRow";
 
 const Index = () => {
+	const { alert, closeAlert } = useAlert();
 	const { authenticated } = useAuth();
 	const [courses, setCourses] = useState([]);
 	const [selectedCourses, setSelectedCourses] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isAlertOpen, setIsAlertOpen] = useState(false);
 
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
 
-	const openAlert = () => setIsAlertOpen(true);
-	const closeAlert = () => setIsAlertOpen(false);
 	let token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -72,14 +71,15 @@ const Index = () => {
 				courses.filter((course) => !selectedCourses.includes(course.id))
 			);
 			setSelectedCourses([]);
+			showAlert("success", "Entries Deleted Successfully!");
 		} catch (error) {
 			console.error("Deletion error:", error);
+			showAlert("error", "Error occured while deleting!");
 		}
 	};
 
 	const handleDeleteConfirmation = () => {
 		closeModal();
-		openAlert();
 		deleteEnrollmentsAndCourse();
 	};
 
@@ -159,9 +159,10 @@ const Index = () => {
 					Courses with enrollments will have their enrollments deleted as well.
 				</ConfirmationModal>
 				<AlertBanner
-					isOpen={isAlertOpen}
+					isOpen={alert.isOpen}
 					onClose={closeAlert}
-					title="Entries Deleted Successfully"
+					status={alert.type}
+					title={alert.message}
 				/>
 				{/* ############### MODAL END ############### */}
 

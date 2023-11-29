@@ -81,9 +81,9 @@ const Edit = () => {
 	if (!course) return <h3>Course not found!</h3>;
 
 	return (
-		<form onSubmit={submitForm}>
+		<form className="bg-base-200 p-16 rounded-2xl" onSubmit={submitForm}>
 			<div>
-				title:{" "}
+				Title:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
@@ -93,7 +93,7 @@ const Edit = () => {
 				/>
 			</div>
 			<div>
-				description:{" "}
+				Description:{" "}
 				<textarea
 					className="textarea h-40 textarea-bordered w-full max-w-xs"
 					type="textarea"
@@ -103,7 +103,7 @@ const Edit = () => {
 				/>
 			</div>
 			<div>
-				code:{" "}
+				Code:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
@@ -113,7 +113,7 @@ const Edit = () => {
 				/>
 			</div>
 			<div>
-				points:{" "}
+				Points:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
@@ -123,7 +123,7 @@ const Edit = () => {
 				/>
 			</div>
 			<div>
-				level:{" "}
+				Level:{" "}
 				<input
 					className="input input-bordered w-full max-w-xs"
 					type="text"
@@ -132,7 +132,7 @@ const Edit = () => {
 					name="level"
 				/>
 			</div>
-			<button type="submit" className="btn btn-outline">
+			<button type="submit" className="btn btn-outline mt-5">
 				Submit
 			</button>
 		</form>

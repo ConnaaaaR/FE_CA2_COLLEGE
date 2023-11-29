@@ -71,17 +71,26 @@ const Show = () => {
 								<button
 									className="btn btn-error"
 									onClick={() => {
-										/* Delete logic here */
+										axios
+											.delete(`/lecturers/${lecturer.id}`, {
+												headers: { Authorization: `Bearer ${token}` },
+											})
+											.then(() => {
+												navigate("/lecturers");
+											})
+											.catch((err) => {
+												console.log(err.response.data);
+											});
 									}}
 								>
 									Delete
 								</button>
-								<button className="btn btn-warning">
-									<Link to={`/lecturers/${id}/edit`}>Edit</Link>
-								</button>
+
+								<Link to={`/lecturer/${lecturer.id}/edit`}>
+									<button className="btn btn-warning">Edit</button>
+								</Link>
 							</div>
 						</div>
-						
 					</div>
 					{authenticated && (
 						<table className="table">

@@ -1,10 +1,27 @@
-import React from "react";
+import { useEffect } from "react";
 
-const AlertBanner = ({ isOpen, onClose, onConfirm, title, children }) => {
+const AlertBanner = ({ isOpen, onClose, status, title, children }) => {
+	const alertClass = status === "success" ? "alert-success" : "alert-error";
+	const iconPath =
+		status === "success"
+			? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" // success icon
+			: "M6 18L18 6M6 6l12 12"; // error icon
+
+	useEffect(() => {
+		let timeout;
+		if (isOpen) {
+			timeout = setTimeout(() => {
+				onClose();
+			}, 5000);
+		}
+
+		return () => clearTimeout(timeout);
+	}, [isOpen, onClose]);
+
 	return (
 		<div
 			role="alert"
-			className={`alert alert-success ${isOpen ? "" : "hidden"}`}
+			className={`alert ${alertClass} ${isOpen ? "" : "hidden"}`}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -16,13 +33,14 @@ const AlertBanner = ({ isOpen, onClose, onConfirm, title, children }) => {
 					strokeLinecap="round"
 					strokeLinejoin="round"
 					strokeWidth="2"
-					d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+					d={iconPath}
 				/>
 			</svg>
 			<span>{title}</span>
 			<button onClick={onClose} className="btn btn-outline">
 				Close
 			</button>
+			{children}
 		</div>
 	);
 };
