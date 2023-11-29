@@ -13,8 +13,13 @@ const EnrolmentRow = ({ enrolment, isAuthenticated }) => {
 							<input type="checkbox" className="checkbox checkbox-primary" />
 						</label>
 					</td>
-					<td>{enrolment.course.title}</td>
-					<td className="text-secondary">{enrolment.course.code}</td>
+					<td>{enrolment.id}</td>
+					<td className="text-secondary">
+						{new Date(enrolment.created_at).toLocaleDateString(undefined, {
+							dateStyle: "medium",
+						})}
+						{" " + enrolment.time}
+					</td>
 					<td>{enrolment.status}</td>
 				</>
 			)}
@@ -25,37 +30,37 @@ const EnrolmentRow = ({ enrolment, isAuthenticated }) => {
 const Show = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [lecturer, setLecturer] = useState(null);
+	const [course, setCourse] = useState(null);
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
 
 	useEffect(() => {
 		axios
-			.get(`/lecturers/${id}`, {
+			.get(`/courses/${id}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((response) => {
-				setLecturer(response.data.data);
+				setCourse(response.data.data);
 			})
 			.catch((err) => {
 				console.error(err.response?.data?.message || "Error fetching data");
 			});
 	}, [id, token]);
 
-	if (!lecturer) return <h3>Lecturer Not Found</h3>;
+	if (!course) return <h3>Course Not Found</h3>;
 
 	return (
 		<div className="container mx-auto p-4">
 			<div className="card lg:card-side bg-base-100 shadow-xl">
 				<div className="card-body">
-					<h2 className="card-title">{lecturer.name}</h2>
-					<p>{lecturer.address}</p>
+					<h2 className="card-title">{course.title}</h2>
+					<p>{course.description}</p>
 					<div className="badge badge-outline badge-secondary">
-						{lecturer.email}
+						{course.code}
 					</div>
-					<div className="badge badge-secondary">{lecturer.phone}</div>
+					<div className="badge badge-secondary">{course.points}</div>
 					<div className="card-actions justify-end">
 						<button className="btn btn-error">Delete</button>
 						<button className="btn btn-warning">
@@ -70,13 +75,13 @@ const Show = () => {
 						<thead>
 							<tr>
 								<th>Select</th>
-								<th>Course Title</th>
-								<th>Code</th>
+								<th>Enrolment Id</th>
+								<th>Created At</th>
 								<th>Status</th>
 							</tr>
 						</thead>
 						<tbody>
-							{lecturer.enrolments.map((enrolment) => (
+							{course.enrolments.map((enrolment) => (
 								<EnrolmentRow
 									enrolment={enrolment}
 									isAuthenticated={authenticated}
