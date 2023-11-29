@@ -89,7 +89,7 @@ const Show = () => {
 		deleteEnrollmentsAndCourse();
 	};
 
-	if (!course) return navigate("/");
+	if (!course) return navigate("/courses");
 
 	return (
 		<div className="container mx-auto rounded-2xl bg-base-200 p-4">

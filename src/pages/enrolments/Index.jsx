@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../../config/api";
 import { useAuth } from "../../contexts/AuthContext";
+import { useAlert } from "../../contexts/AlertContext";
 import { Link } from "react-router-dom";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
@@ -9,17 +10,14 @@ import AlertBanner from "../../components/AlertBanner";
 
 const Index = () => {
 	const { authenticated } = useAuth();
+	const { alert, closeAlert } = useAlert();
 	const [enrolments, setEnrolments] = useState([]);
 	const [selectedEnrolments, setSelectedEnrolments] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isAlertOpen, setIsAlertOpen] = useState(false);
 
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
-
-	const openAlert = () => setIsAlertOpen(true);
-	const closeAlert = () => setIsAlertOpen(false);
 
 	let token = localStorage.getItem("token");
 
@@ -123,9 +121,10 @@ const Index = () => {
 					title="Are you sure you want to delete the selected enrolments?"
 				/>
 				<AlertBanner
-					isOpen={isAlertOpen}
+					isOpen={alert.isOpen}
 					onClose={closeAlert}
-					title="Entries Deleted Successfully"
+					status={alert.type}
+					title={alert.message}
 				/>
 				<section className="bg-base-300 rounded-2xl p-5">
 					<h2 className="text-3xl">All Enrolments</h2>

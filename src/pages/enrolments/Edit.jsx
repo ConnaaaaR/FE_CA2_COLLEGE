@@ -6,7 +6,11 @@ import axios from "../../config/api";
 const Edit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [course, setCourse] = useState(null);
+	const [enrolment, setEnrolment] = useState(null);
+	const [courses, setCourses] = useState(null);
+	const [lecturers, setLecturers] = useState(null);
+	const [loading, setLoading] = useState(false);
+
 	const [form, setForm] = useState({
 		title: "",
 		description: "",
@@ -14,31 +18,102 @@ const Edit = () => {
 		points: "",
 		level: "",
 	});
-	const [errors, setErrors] = useState();
+	const [errors, setErrors] = useState({});
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
+		setLoading(true);
 		axios
-			.get(`/courses/${id}`, {
+			.get(`/enrolments/${id}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((response) => {
-				setCourse(response.data.data);
-				setForm(response.data.data);
+				setEnrolment(response.data.data);
+				// set the initial form state with the fetched enrolment data
+				setForm({
+					status: response.data.data.status,
+					course_id: response.data.data.course_id,
+					lecturer_id: response.data.data.lecturer_id,
+				});
 			})
-			.catch((err) => {
-				console.error(err.response.data);
-				setErrors(err.response.data.message);
+			.catch((error) => {
+				console.error("Error fetching enrolment", error);
+				setLoading(false);
 			});
-	}, [id]);
+	}, [id, token]);
+
+	useEffect(() => {
+		axios
+			.get("/courses", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((response) => {
+				setCourses(response.data.data);
+			})
+			.catch((error) => {
+				console.error("Error fetching courses", error);
+			});
+		axios
+			.get("/lecturers", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((response) => {
+				setLecturers(response.data.data);
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.error("Error fetching lecturers", error);
+			});
+	}, [token]);
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
 		}));
+	};
+
+	const getDateStamp = () => {
+		const now = new Date();
+		return now.toISOString().split("T")[0];
+	};
+
+	const getTimeStamp = () => {
+		const now = new Date();
+		return now.toTimeString().split(" ")[0];
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		const timeStampedForm = {
+			...form,
+			date: getDateStamp(),
+			time: getTimeStamp(),
+		};
+		console.log(timeStampedForm);
+		axios
+			.put(`/enrolments/${id}`, timeStampedForm, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((response) => {
+				navigate("/enrolments");
+			})
+			.catch((error) => {
+				if (error.response && error.response.data.errors) {
+					setErrors(error.response.data.errors);
+				} else {
+					console.error("An unexpected error occurred", error);
+				}
+			});
 	};
 
 	const isRequired = (fields) => {
@@ -64,13 +139,13 @@ const Edit = () => {
 
 		if (isRequired(["title", "description", "code", "points", "level"])) {
 			axios
-				.put(`/courses/${id}`, form, {
+				.put(`/enrolments/${id}`, form, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				})
 				.then((response) => {
-					navigate(`/courses/${id}`);
+					navigate(`/enrolment/${id}`);
 				})
 				.catch((err) => {
 					console.error(err.response.data.message);
@@ -78,62 +153,81 @@ const Edit = () => {
 		}
 	};
 
-	if (!course) return <h3>Course not found!</h3>;
+	if (loading)
+		return <span className="loading loading-spinner loading-lg"></span>;
+	if (!loading && !enrolment)
+		return <span className="loading loading-spinner loading-lg"></span>;
 
 	return (
-		<form onSubmit={submitForm}>
-			<div>
-				title:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
+		<form
+			onSubmit={handleSubmit}
+			className="form-control mx-auto w-100 max-w-md"
+		>
+			<div className="form-group ">
+				<label className="label">
+					<span className="label-text">Status:</span>
+				</label>
+				<select
+					className="select select-bordered w-full"
+					name="status"
+					value={form.status}
 					onChange={handleForm}
-					value={form.title}
-					name="title"
-				/>
+				>
+					<option value="">Select Status</option>
+					<option value="assigned">Assigned</option>
+					<option value="career_break">Career Break</option>
+					<option value="interested">Interested</option>
+					<option value="associate">Associate</option>
+				</select>
+				{errors.status && <span className="text-error">{errors.status}</span>}
 			</div>
-			<div>
-				description:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
+
+			<div className="form-group ">
+				<label className="label">
+					<span className="label-text">Course:</span>
+				</label>
+				<select
+					className="select select-bordered w-full"
+					name="course_id"
+					value={form.course_id}
 					onChange={handleForm}
-					value={form.description}
-					name="description"
-				/>
+				>
+					<option value="">Select a Course</option>
+					{courses?.map((course) => (
+						<option key={course.id} value={course.id}>
+							{course.title}
+						</option>
+					))}
+				</select>
+				{errors.course_id && (
+					<span className="text-error">{errors.course_id}</span>
+				)}
 			</div>
-			<div>
-				code:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
+
+			<div className="form-group">
+				<label className="label">
+					<span className="label-text">Lecturer:</span>
+				</label>
+				<select
+					className="select select-bordered w-full"
+					name="lecturer_id"
+					value={form.lecturer_id}
 					onChange={handleForm}
-					value={form.code}
-					name="code"
-				/>
+				>
+					<option value="">Select a Lecturer</option>
+					{lecturers?.map((lecturer) => (
+						<option key={lecturer.id} value={lecturer.id}>
+							{lecturer.name}
+						</option>
+					))}
+				</select>
+				{errors.lecturer_id && (
+					<span className="text-error">{errors.lecturer_id}</span>
+				)}
 			</div>
-			<div>
-				points:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.points}
-					name="points"
-				/>
-			</div>
-			<div>
-				level:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.level}
-					name="level"
-				/>
-			</div>
-			<button type="submit" className="btn btn-outline">
-				Submit
+
+			<button className="btn my-5 btn-primary" type="submit">
+				Edit Enrolment
 			</button>
 		</form>
 	);
