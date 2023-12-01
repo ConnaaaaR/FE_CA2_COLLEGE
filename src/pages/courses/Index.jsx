@@ -21,11 +21,7 @@ const Index = () => {
 	useEffect(() => {
 		setLoading(true);
 		axios
-			.get("/courses", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/courses")
 			.then((response) => {
 				setCourses(response.data.data);
 				setLoading(false);
