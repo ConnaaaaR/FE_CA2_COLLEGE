@@ -23,11 +23,7 @@ const Index = () => {
 	useEffect(() => {
 		setLoading(true);
 		axios
-			.get("/enrolments", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/enrolments")
 			.then((response) => {
 				setEnrolments(response.data.data);
 				setLoading(false);
@@ -55,9 +51,7 @@ const Index = () => {
 		let token = localStorage.getItem("token");
 		try {
 			for (const enrolmentId of selectedEnrolments) {
-				await axios.delete(`/enrolments/${enrolmentId}`, {
-					headers: { Authorization: `Bearer ${token}` },
-				});
+				await axios.delete(`/enrolments/${enrolmentId}`);
 			}
 
 			setEnrolments(

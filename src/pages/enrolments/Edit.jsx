@@ -20,11 +20,7 @@ const Edit = () => {
 	useEffect(() => {
 		setLoading(true);
 		axios
-			.get(`/enrolments/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(`/enrolments/${id}`)
 			.then((response) => {
 				setEnrolment(response.data.data);
 				// set the initial form state with the fetched enrolment data
@@ -42,11 +38,7 @@ const Edit = () => {
 
 	useEffect(() => {
 		axios
-			.get("/courses", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/courses")
 			.then((response) => {
 				setCourses(response.data.data);
 			})
@@ -54,11 +46,7 @@ const Edit = () => {
 				console.error("Error fetching courses", error);
 			});
 		axios
-			.get("/lecturers", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/lecturers")
 			.then((response) => {
 				setLecturers(response.data.data);
 				setLoading(false);
@@ -94,11 +82,7 @@ const Edit = () => {
 			time: getTimeStamp(),
 		};
 		axios
-			.put(`/enrolments/${id}`, timeStampedForm, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.put(`/enrolments/${id}`, timeStampedForm)
 			.then((response) => {
 				showAlert("success", "Enrolment Updated Successfully!");
 				navigate("/enrolments");
@@ -135,11 +119,7 @@ const Edit = () => {
 
 		if (isRequired(["title", "description", "code", "points", "level"])) {
 			axios
-				.put(`/enrolments/${id}`, form, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				})
+				.put(`/enrolments/${id}`, form)
 				.then((response) => {
 					showAlert("success", "Enrollment Updated Successfully!");
 					navigate(`/enrolment/${id}`);

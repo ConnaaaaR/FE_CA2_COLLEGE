@@ -67,11 +67,7 @@ const Edit = () => {
 
 		if (isRequired(["name", "address", "phone", "email"])) {
 			axios
-				.put(`/lecturers/${id}`, form, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				})
+				.put(`/lecturers/${id}`, form)
 				.then(() => {
 					showAlert("success", "Lecturer edited successfully!");
 					navigate(`/lecturer/${id}`);

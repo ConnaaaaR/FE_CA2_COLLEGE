@@ -52,13 +52,9 @@ const Index = () => {
 			for (const courseId of selectedCourses) {
 				const course = courses.find((c) => c.id === courseId);
 				for (const enrollment of course.enrolments) {
-					await axios.delete(`/enrolments/${enrollment.id}`, {
-						headers: { Authorization: `Bearer ${token}` },
-					});
+					await axios.delete(`/enrolments/${enrollment.id}`);
 				}
-				await axios.delete(`/courses/${courseId}`, {
-					headers: { Authorization: `Bearer ${token}` },
-				});
+				await axios.delete(`/courses/${courseId}`);
 			}
 			// update list
 			setCourses(

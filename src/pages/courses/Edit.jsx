@@ -21,11 +21,7 @@ const Edit = () => {
 
 	useEffect(() => {
 		axios
-			.get(`/courses/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(`/courses/${id}`)
 			.then((response) => {
 				setCourse(response.data.data);
 				setForm(response.data.data);
@@ -66,11 +62,7 @@ const Edit = () => {
 
 		if (isRequired(["title", "description", "code", "points", "level"])) {
 			axios
-				.put(`/courses/${id}`, form, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				})
+				.put(`/courses/${id}`, form)
 				.then((response) => {
 					showAlert("success", "Course Edited Successfully!");
 					navigate(`/courses/${id}`);

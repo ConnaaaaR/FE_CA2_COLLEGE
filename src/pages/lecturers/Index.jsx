@@ -19,11 +19,7 @@ const Index = () => {
 	useEffect(() => {
 		setLoading(true);
 		axios
-			.get("/lecturers", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/lecturers")
 			.then((response) => {
 				setLecturers(response.data.data);
 				setLoading(false);
@@ -54,14 +50,10 @@ const Index = () => {
 			for (const lecturerId of selectedLecturers) {
 				const lecturer = lecturers.find((c) => c.id === lecturerId);
 				for (const enrollment of lecturer.enrolments) {
-					await axios.delete(`/enrolments/${enrollment.id}`, {
-						headers: { Authorization: `Bearer ${token}` },
-					});
+					await axios.delete(`/enrolments/${enrollment.id}`);
 				}
 				await axios
-					.delete(`/lecturers/${lecturerId}`, {
-						headers: { Authorization: `Bearer ${token}` },
-					})
+					.delete(`/lecturers/${lecturerId}`)
 					.catch((err) => {
 						console.log(err.response.data);
 					});

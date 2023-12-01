@@ -14,24 +14,29 @@ const Show = () => {
 		useAlert();
 
 	const [lecturer, setLecturer] = useState(null);
+	const [selectedEnrolments, setSelectedEnrolments] = useState([]);
 
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
+
+	const toggleEnrolmentSelection = (enrolmentId) => {
+		setSelectedEnrolments((prevSelectedEnrolments) =>
+			prevSelectedEnrolments.includes(enrolmentId)
+				? prevSelectedEnrolments.filter((id) => id !== enrolmentId)
+				: [...prevSelectedEnrolments, enrolmentId]
+		);
+	};
 
 	const deleteEnrollmentsAndCourse = async () => {
 		// deletes enrollments, waits for it to complete and then deletes the lecturer
 		try {
 			if (lecturer.enrolments.length > 0) {
 				for (const enrollment of lecturer.enrolments) {
-					await axios.delete(`/enrolments/${enrollment.id}`, {
-						headers: { Authorization: `Bearer ${token}` },
-					});
+					await axios.delete(`/enrolments/${enrollment.id}`);
 				}
 			}
 
-			await axios.delete(`/lecturers/${lecturer.id}`, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
+			await axios.delete(`/lecturers/${lecturer.id}`);
 
 			showAlert("success", "Lecturer Deleted Successfully!");
 			navigate("/lecturers");
@@ -47,12 +52,12 @@ const Show = () => {
 	};
 
 	useEffect(() => {
+		console.log(selectedEnrolments);
+	}, [selectedEnrolments]);
+
+	useEffect(() => {
 		axios
-			.get(`/lecturers/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(`/lecturers/${id}`)
 			.then((response) => {
 				setLecturer(response.data.data);
 			})
@@ -68,7 +73,12 @@ const Show = () => {
 					<>
 						<th>
 							<label>
-								<input type="checkbox" className="checkbox checkbox-info" />
+								<input
+									type="checkbox"
+									className="checkbox checkbox-info"
+									checked={selectedEnrolments.includes(enrolment.id)}
+									onChange={() => toggleEnrolmentSelection(enrolment.id)}
+								/>
 							</label>
 						</th>
 						<td>

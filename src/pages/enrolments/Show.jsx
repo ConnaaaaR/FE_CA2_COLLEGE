@@ -10,6 +10,7 @@ const Show = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [enrolment, setEnrolment] = useState(null);
+
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
 	const { alert, showAlert, closeAlert, modal, openModal, closeModal } =
@@ -17,11 +18,7 @@ const Show = () => {
 
 	useEffect(() => {
 		axios
-			.get(`/enrolments/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(`/enrolments/${id}`)
 			.then((response) => {
 				setEnrolment(response.data.data);
 			})

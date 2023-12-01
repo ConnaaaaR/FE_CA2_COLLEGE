@@ -19,11 +19,7 @@ const Create = () => {
 
 	useEffect(() => {
 		axios
-			.get("/courses", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/courses")
 			.then((response) => {
 				setCourses(response.data.data);
 			})
@@ -31,11 +27,7 @@ const Create = () => {
 				console.error("Error fetching courses", error);
 			});
 		axios
-			.get("/lecturers", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get("/lecturers")
 			.then((response) => {
 				setLecturers(response.data.data);
 			})
@@ -71,12 +63,8 @@ const Create = () => {
 		};
 		console.log(timeStampedForm);
 		axios
-			.post("/enrolments", timeStampedForm, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
-			.then((response) => {
+			.post("/enrolments", timeStampedForm)
+			.then(() => {
 				navigate("/enrolments");
 			})
 			.catch((error) => {

@@ -53,11 +53,7 @@ const Create = () => {
 
 		if (isRequired(["title", "description", "code", "points", "level"])) {
 			axios
-				.post(`/courses/`, form, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				})
+				.post(`/courses/`, form)
 				.then((response) => {
 					navigate(`/courses`);
 				})

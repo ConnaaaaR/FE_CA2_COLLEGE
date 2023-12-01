@@ -44,12 +44,8 @@ const Create = () => {
 
 		if (isRequired(["name", "address", "phone", "email"])) {
 			axios
-				.post(`/lecturers/`, form, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				})
-				.then((response) => {
+				.post(`/lecturers/`, form)
+				.then(() => {
 					navigate(`/lecturers`);
 				})
 				.catch((err) => {

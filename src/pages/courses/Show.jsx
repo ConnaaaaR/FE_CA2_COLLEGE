@@ -65,11 +65,7 @@ const Show = () => {
 
 	useEffect(() => {
 		axios
-			.get(`/courses/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(`/courses/${id}`)
 			.then((response) => {
 				setCourse(response.data.data);
 			})
@@ -83,15 +79,11 @@ const Show = () => {
 		try {
 			if (course.enrolments.length > 0) {
 				for (const enrollment of course.enrolments) {
-					await axios.delete(`/enrolments/${enrollment.id}`, {
-						headers: { Authorization: `Bearer ${token}` },
-					});
+					await axios.delete(`/enrolments/${enrollment.id}`);
 				}
 			}
 
-			await axios.delete(`/courses/${course.id}`, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
+			await axios.delete(`/courses/${course.id}`);
 
 			showAlert("success", "Course Deleted Successfully!");
 			navigate("/courses");
