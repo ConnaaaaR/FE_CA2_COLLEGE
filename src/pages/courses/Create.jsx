@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
-
+import { useAlert } from "../../contexts/AlertContext";
 import axios from "../../config/api";
 
 const Create = () => {
 	const navigate = useNavigate();
+	const { showAlert } = useAlert();
 	const [form, setForm] = useState({});
 	const [errors, setErrors] = useState();
-	const token = localStorage.getItem("token");
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
@@ -55,6 +55,7 @@ const Create = () => {
 			axios
 				.post(`/courses/`, form)
 				.then((response) => {
+					showAlert("success", "Course Created Successfully!");
 					navigate(`/courses`);
 				})
 				.catch((err) => {
@@ -75,6 +76,7 @@ const Create = () => {
 					name="title"
 				/>
 			</div>
+			{errors.title && <span className="text-error">{errors.title}</span>}
 			<div>
 				description:{" "}
 				<input
@@ -85,6 +87,9 @@ const Create = () => {
 					name="description"
 				/>
 			</div>
+			{errors.description && (
+				<span className="text-error">{errors.description}</span>
+			)}
 			<div>
 				code:{" "}
 				<input
@@ -97,6 +102,7 @@ const Create = () => {
 					title="Code must be in the format AA123"
 				/>
 			</div>
+			{errors.code && <span className="text-error">{errors.code}</span>}
 			<div>
 				points:{" "}
 				<input
@@ -120,6 +126,7 @@ const Create = () => {
 					required
 				/>
 			</div>
+			{errors.level && <span className="text-error">{errors.level}</span>}
 			<button type="submit" className="btn btn-outline">
 				Submit
 			</button>

@@ -83,7 +83,7 @@ const Edit = () => {
 		};
 		axios
 			.put(`/enrolments/${id}`, timeStampedForm)
-			.then((response) => {
+			.then(() => {
 				showAlert("success", "Enrolment Updated Successfully!");
 				navigate("/enrolments");
 			})

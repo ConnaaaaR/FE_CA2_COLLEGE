@@ -141,7 +141,7 @@ const Index = () => {
 	return (
 		<>
 			<main className="container mx-auto max-w-7xl my-5">
-				{/* ################# MODAL ################# */}
+				{/* ################# ALERTS ################# */}
 				<ConfirmationModal
 					isOpen={modal.isModalOpen}
 					onClose={closeModal}
@@ -156,7 +156,7 @@ const Index = () => {
 					status={alert.type}
 					title={alert.message}
 				/>
-				{/* ############### MODAL END ############### */}
+				{/* ############### ALERTS END ############### */}
 
 				<section className=" bg-base-300 rounded-2xl my-2 p-5 ">
 					<div className="flex justify-between">

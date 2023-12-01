@@ -94,6 +94,7 @@ const Edit = () => {
 					name="name"
 				/>
 			</div>
+			{errors.name && <span className="text-error">{errors.name}</span>}
 			<div>
 				Address:{" "}
 				<textarea
@@ -104,6 +105,7 @@ const Edit = () => {
 					name="address"
 				/>
 			</div>
+			{errors.address && <span className="text-error">{errors.address}</span>}
 			<div>
 				Phone:{" "}
 				<input
@@ -114,6 +116,7 @@ const Edit = () => {
 					name="phone"
 				/>
 			</div>
+			{errors.phone && <span className="text-error">{errors.phone}</span>}
 			<div>
 				Email:{" "}
 				<input
@@ -124,7 +127,7 @@ const Edit = () => {
 					name="email"
 				/>
 			</div>
-
+			{errors.email && <span className="text-error">{errors.email}</span>}
 			<button type="submit" className="btn btn-outline">
 				Update Lecturer
 			</button>

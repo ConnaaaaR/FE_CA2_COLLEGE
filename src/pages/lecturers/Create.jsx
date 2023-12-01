@@ -66,6 +66,7 @@ const Create = () => {
 					name="name"
 				/>
 			</div>
+			{errors.name && <span className="text-error">{errors.name}</span>}
 			<div>
 				address:{" "}
 				<input

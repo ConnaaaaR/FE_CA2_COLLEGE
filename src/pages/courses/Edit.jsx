@@ -17,7 +17,6 @@ const Edit = () => {
 		level: "",
 	});
 	const [errors, setErrors] = useState();
-	const token = localStorage.getItem("token");
 
 	useEffect(() => {
 		axios
@@ -88,6 +87,7 @@ const Edit = () => {
 					name="title"
 				/>
 			</div>
+			{errors.title && <span className="text-error">{errors.title}</span>}
 			<div>
 				Description:{" "}
 				<textarea
@@ -98,6 +98,9 @@ const Edit = () => {
 					name="description"
 				/>
 			</div>
+			{errors.description && (
+				<span className="text-error">{errors.description}</span>
+			)}
 			<div>
 				Code:{" "}
 				<input
@@ -108,6 +111,7 @@ const Edit = () => {
 					name="code"
 				/>
 			</div>
+			{errors.code && <span className="text-error">{errors.code}</span>}
 			<div>
 				Points:{" "}
 				<input
@@ -128,6 +132,7 @@ const Edit = () => {
 					name="level"
 				/>
 			</div>
+			{errors.level && <span className="text-error">{errors.level}</span>}
 			<button type="submit" className="btn btn-outline mt-5">
 				Submit
 			</button>
