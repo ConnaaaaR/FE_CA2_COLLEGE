@@ -8,6 +8,7 @@ const Home = () => {
 	const [courses, setCourses] = useState();
 	const [lecturers, setLecturers] = useState();
 	const [enrollments, setEnrolments] = useState();
+	const [loading, setLoading] = useState(false);
 
 	const countEnrollments = (arr) => {
 		const timeCutOff = new Date();
@@ -24,6 +25,7 @@ const Home = () => {
 	};
 
 	useEffect(() => {
+		setLoading(true);
 		axios
 			.get("/courses")
 			.then((response) => {
@@ -48,7 +50,12 @@ const Home = () => {
 			.catch((err) => {
 				console.error("there was an error: ", err);
 			});
+		setLoading(false);
 	}, []);
+
+	if (loading)
+		return <span className="loading loading-spinner loading-lg"></span>;
+
 	return (
 		<>
 			{!authenticated ? (
