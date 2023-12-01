@@ -35,8 +35,14 @@ const LoginForm = () => {
 	return (
 		<>
 			<main className="container mx-auto max-w-3xl my-5  ">
-				<section className="flex parent flex-col justify-self-center py-48 sm:flex-col  justify-evenly gap-2 bg-primary rounded-2xl p-5 items-center prose prose-slate ">
-					<h2 className="text-3xl">Login</h2>
+				<section className="flex flex-col py-1/3 gap-3 bg-base-300 rounded-2xl p-5 mx-auto items-center prose prose-slate ">
+					<img
+						className="mx-auto"
+						src="/Fingerprint-rafiki.svg"
+						alt=""
+						width="50%"
+					/>
+					<h2 className="text-3xl m-0">Login</h2>
 					<p>{error}</p>
 					Email:{" "}
 					<input
@@ -59,7 +65,6 @@ const LoginForm = () => {
 						className="btn btn-outline w-full max-w-sm"
 						onClick={sendForm}
 					>
-						{" "}
 						Login
 					</button>
 					<Link to="/register">No account? Register Here!</Link>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import { useAlert } from "../../contexts/AlertContext";
 
 import axios from "../../config/api";
 
 const Edit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { showAlert } = useAlert();
 	const [course, setCourse] = useState(null);
 	const [form, setForm] = useState({
 		title: "",
@@ -70,10 +72,12 @@ const Edit = () => {
 					},
 				})
 				.then((response) => {
+					showAlert("success", "Course Edited Successfully!");
 					navigate(`/courses/${id}`);
 				})
 				.catch((err) => {
 					console.error(err.response.data.message);
+					showAlert("error", "Failed to Edit Course!");
 				});
 		}
 	};

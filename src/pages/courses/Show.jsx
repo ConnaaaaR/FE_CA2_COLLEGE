@@ -4,23 +4,18 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { useAlert } from "../../contexts/AlertContext";
+import AlertBanner from "../../components/AlertBanner";
 
 const Show = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const { showAlert } = useAlert();
+	const { alert, showAlert, closeAlert, modal, openModal, closeModal } =
+		useAlert();
 
 	const [course, setCourse] = useState(null);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
-
-	const openModal = () => setIsModalOpen(true);
-	const closeModal = () => setIsModalOpen(false);
-
-	// const { showAlert } = useAlert();
 
 	const EnrolmentRow = ({ enrolment, isAuthenticated }) => {
 		return (
@@ -40,6 +35,28 @@ const Show = () => {
 							{" " + enrolment.time}
 						</td>
 						<td>{enrolment.status}</td>
+						<td className="flex gap-2">
+							<button
+								onClick={() => {
+									console.log("pressed");
+									axios.delete(`/enrolments/${enrolment.id}`).catch((err) => {
+										console.error(err);
+									});
+								}}
+								className="btn btn-square btn-warning"
+							>
+								<img
+									src="/editIcon.svg"
+									alt="edit icon, represented by a pencil."
+								/>
+							</button>
+							<button className="btn  btn-square btn-error">
+								<img
+									src="/deleteIcon.svg"
+									alt="delete icon, represented by a pencil."
+								/>
+							</button>
+						</td>
 					</>
 				)}
 			</tr>
@@ -92,17 +109,14 @@ const Show = () => {
 	if (!course) return navigate("/courses");
 
 	return (
-		<div className="container mx-auto rounded-2xl bg-base-200 p-4">
-			{/* ################# MODAL ################# */}
-			<ConfirmationModal
-				isOpen={isModalOpen}
-				onClose={closeModal}
-				onConfirm={handleDeleteConfirmation}
-				title="Are you sure you want to delete the selected courses?"
-			>
-				Courses with enrollments will have their enrollments deleted as well.
-			</ConfirmationModal>
-			<div className="card lg:card-side bg-base-300  shadow-xl">
+		<>
+			<AlertBanner
+				isOpen={alert.isOpen}
+				onClose={closeAlert}
+				status={alert.type}
+				title={alert.message}
+			/>
+			<div className="card lg:card-side bg-base-300 max-w-xl mx-auto  shadow-xl">
 				<div className="card-body">
 					<h2 className="card-title">{course.title}</h2>
 					<p>{course.description}</p>
@@ -111,41 +125,52 @@ const Show = () => {
 					</div>
 					<div className="badge badge-secondary">{course.points}</div>
 					<div className="card-actions justify-end">
-						<button
-							className="btn btn-error"
-							onClick={handleDeleteConfirmation}
-						>
+						<button className="btn btn-error" onClick={openModal}>
 							Delete
 						</button>
 						<button className="btn btn-warning">
-							<Link to={`/lecturers/${id}/edit`}>Edit</Link>
+							<Link to={`/courses/${id}/edit`}>Edit</Link>
 						</button>
 					</div>
 				</div>
 			</div>
-			{authenticated && (
-				<div className="overflow-x-auto mt-5">
-					<table className="table w-full">
-						<thead>
-							<tr>
-								<th>Select</th>
-								<th>Enrolment Id</th>
-								<th>Created At</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							{course.enrolments.map((enrolment) => (
-								<EnrolmentRow
-									enrolment={enrolment}
-									isAuthenticated={authenticated}
-								/>
-							))}
-						</tbody>
-					</table>
-				</div>
-			)}
-		</div>
+			<div className="container mx-auto rounded-2xl max-w-7xl bg-base-200 p-4">
+				{/* ################# MODAL ################# */}
+				<ConfirmationModal
+					isOpen={modal.isModalOpen}
+					onClose={closeModal}
+					onConfirm={handleDeleteConfirmation}
+					title="Are you sure you want to delete the selected courses?"
+				>
+					Courses with enrollments will have their enrollments deleted as well.
+				</ConfirmationModal>
+
+				{authenticated && (
+					<div className="overflow-x-auto mt-5">
+						<h2>Enrollments</h2>
+						<table className="table w-full">
+							<thead>
+								<tr>
+									<th>Select</th>
+									<th>Enrolment Id</th>
+									<th>Created At</th>
+									<th>Status</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{course.enrolments.map((enrolment) => (
+									<EnrolmentRow
+										enrolment={enrolment}
+										isAuthenticated={authenticated}
+									/>
+								))}
+							</tbody>
+						</table>
+					</div>
+				)}
+			</div>
+		</>
 	);
 };
 

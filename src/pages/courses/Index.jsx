@@ -9,15 +9,12 @@ import AlertBanner from "../../components/AlertBanner";
 import SkeletonRow from "../../components/SkeletonRow";
 
 const Index = () => {
-	const { alert, closeAlert } = useAlert();
+	const { alert, showAlert, closeAlert, modal, openModal, closeModal } =
+		useAlert();
 	const { authenticated } = useAuth();
 	const [courses, setCourses] = useState([]);
 	const [selectedCourses, setSelectedCourses] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const openModal = () => setIsModalOpen(true);
-	const closeModal = () => setIsModalOpen(false);
 
 	let token = localStorage.getItem("token");
 
@@ -54,6 +51,7 @@ const Index = () => {
 
 	const deleteEnrollmentsAndCourse = async () => {
 		// deletes enrollments, waits for it to complete and then deletes the course
+		setLoading(true);
 		try {
 			for (const courseId of selectedCourses) {
 				const course = courses.find((c) => c.id === courseId);
@@ -72,7 +70,9 @@ const Index = () => {
 			);
 			setSelectedCourses([]);
 			showAlert("success", "Entries Deleted Successfully!");
+			setLoading(false);
 		} catch (error) {
+			setLoading(false);
 			console.error("Deletion error:", error);
 			showAlert("error", "Error occured while deleting!");
 		}
@@ -138,7 +138,7 @@ const Index = () => {
 						</tr>
 					</>
 				) : (
-					<p>
+					<p key={course.id}>
 						<b>Title: </b> {course.title}
 					</p>
 				)}
@@ -151,7 +151,7 @@ const Index = () => {
 			<main className="container mx-auto max-w-7xl my-5">
 				{/* ################# MODAL ################# */}
 				<ConfirmationModal
-					isOpen={isModalOpen}
+					isOpen={modal.isModalOpen}
 					onClose={closeModal}
 					onConfirm={handleDeleteConfirmation}
 					title="Are you sure you want to delete the selected courses?"
@@ -167,13 +167,18 @@ const Index = () => {
 				{/* ############### MODAL END ############### */}
 
 				<section className=" bg-base-300 rounded-2xl my-2 p-5 ">
-					<h2 className="text-3xl">All Courses</h2>
+					<div className="flex justify-between">
+						<h2 className="text-3xl">All Courses</h2>
+
+						<div className="overflow-x-auto ">
+							<div className="flex-none"></div>
+							<button onClick={openModal} className="btn btn-error flex flex-1">
+								Delete Selected
+							</button>
+						</div>
+					</div>
 
 					<div className="overflow-x-auto ">
-						<div className="flex-none"></div>
-						<button onClick={openModal} className="btn btn-error flex flex-1">
-							Delete Selected
-						</button>
 						<table className="table ">
 							<thead>
 								<tr>

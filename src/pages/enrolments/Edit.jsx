@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAlert } from "../../contexts/AlertContext";
 
 import axios from "../../config/api";
 
 const Edit = () => {
 	const { id } = useParams();
+	const { showAlert } = useAlert();
 	const navigate = useNavigate();
 	const [enrolment, setEnrolment] = useState(null);
 	const [courses, setCourses] = useState(null);
 	const [lecturers, setLecturers] = useState(null);
 	const [loading, setLoading] = useState(false);
 
-	const [form, setForm] = useState({
-		title: "",
-		description: "",
-		code: "",
-		points: "",
-		level: "",
-	});
+	const [form, setForm] = useState({});
 	const [errors, setErrors] = useState({});
 	const token = localStorage.getItem("token");
 
@@ -39,8 +35,8 @@ const Edit = () => {
 				});
 			})
 			.catch((error) => {
-				console.error("Error fetching enrolment", error);
 				setLoading(false);
+				console.error("Error fetching enrolment", error);
 			});
 	}, [id, token]);
 
@@ -97,7 +93,6 @@ const Edit = () => {
 			date: getDateStamp(),
 			time: getTimeStamp(),
 		};
-		console.log(timeStampedForm);
 		axios
 			.put(`/enrolments/${id}`, timeStampedForm, {
 				headers: {
@@ -105,6 +100,7 @@ const Edit = () => {
 				},
 			})
 			.then((response) => {
+				showAlert("success", "Enrolment Updated Successfully!");
 				navigate("/enrolments");
 			})
 			.catch((error) => {
@@ -145,6 +141,7 @@ const Edit = () => {
 					},
 				})
 				.then((response) => {
+					showAlert("success", "Enrollment Updated Successfully!");
 					navigate(`/enrolment/${id}`);
 				})
 				.catch((err) => {
@@ -156,7 +153,7 @@ const Edit = () => {
 	if (loading)
 		return <span className="loading loading-spinner loading-lg"></span>;
 	if (!loading && !enrolment)
-		return <span className="loading loading-spinner loading-lg"></span>;
+		return <h3>Error fetching enrolment! Enrolment does not exist.</h3>;
 
 	return (
 		<form

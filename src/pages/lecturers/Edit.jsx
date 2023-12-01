@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../config/api";
+import { useAlert } from "../../contexts/AlertContext";
 
 const Edit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { showAlert } = useAlert();
 	const [lecturer, setLecturer] = useState(null);
 	const [form, setForm] = useState({
 		name: "",
@@ -65,16 +67,18 @@ const Edit = () => {
 
 		if (isRequired(["name", "address", "phone", "email"])) {
 			axios
-				.put(`/lecturer/${id}`, form, {
+				.put(`/lecturers/${id}`, form, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				})
-				.then((response) => {
-					navigate(`/lecturers/${id}`);
+				.then(() => {
+					showAlert("success", "Lecturer edited successfully!");
+					navigate(`/lecturer/${id}`);
 				})
 				.catch((err) => {
-					console.error(err.response.data.message);
+					console.error(err.response.data);
+					showAlert("error", "An unexpected error occurred!");
 					setErrors(err.response.data);
 				});
 		}

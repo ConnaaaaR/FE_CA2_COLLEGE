@@ -27,12 +27,13 @@ const Navbar = () => {
 	return (
 		<>
 			<div className="navbar bg-base-100">
-				
 				<div className="flex-1">
-					<Link to="/" className="btn btn-ghost text-xl">
-						class<span className="text-success-content">Coord</span>
+					<Link to="/" className="btn btn-ghost text-xl font-normal">
+						class
+						<span className="bg-info rounded p-1 font-bold text-neutral-content">
+							Coord
+						</span>
 					</Link>
-				
 				</div>
 				<div className="flex-none gap-8">
 					<div className="flex-none gap-8">

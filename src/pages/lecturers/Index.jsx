@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "../../config/api";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import AlertBanner from "../../components/AlertBanner";
+import { useAlert } from "../../contexts/AlertContext";
+import SkeletonRow from "../../components/SkeletonRow";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
 
@@ -10,10 +13,7 @@ const Index = () => {
 	const [lecturers, setLecturers] = useState([]);
 	const [selectedLecturers, setSelectedLecturers] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const openModal = () => setIsModalOpen(true);
-	const closeModal = () => setIsModalOpen(false);
+	const { alert, closeAlert, modal, openModal, closeModal } = useAlert();
 	let token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -35,9 +35,9 @@ const Index = () => {
 	}, []);
 
 	// debug useEffect for seeing deletion IDs
-	useEffect(() => {
-		console.log(selectedLecturers);
-	}, [selectedLecturers]);
+	// useEffect(() => {
+	// 	console.log(selectedLecturers);
+	// }, [selectedLecturers]);
 
 	const toggleLecturerSelection = (lecturerId) => {
 		setSelectedLecturers((prevSelectedLecturers) =>
@@ -79,35 +79,6 @@ const Index = () => {
 	const handleDeleteConfirmation = () => {
 		closeModal();
 		deleteEnrollmentsAndLecturer();
-	};
-
-	const SkeletonRow = () => {
-		return (
-			<tr>
-				<td>
-					<div className="skeleton h-8 w-full"></div>
-				</td>
-				<td>
-					<div className="skeleton h-8 w-1/4"></div>
-				</td>
-				<td>
-					<div className="flex flex-col gap-4">
-						<div className="skeleton h-8 w-1/2"></div>
-						<div className="skeleton h-8 w-full"></div>
-						<div className="skeleton h-8 w-full"></div>
-					</div>
-				</td>
-				<td>
-					<div className="skeleton h-8 w-1/4"></div>
-				</td>
-				<td>
-					<div className="flex gap-2">
-						<div className="skeleton h-8 w-20"></div>
-						<div className="skeleton h-8 w-20"></div>
-					</div>
-				</td>
-			</tr>
-		);
 	};
 
 	const courseSkeletons = [...Array(15)].map((_, index) => (
@@ -160,9 +131,7 @@ const Index = () => {
 
 							<th>
 								<Link to={`/lecturer/${lecturer.id}`}>
-									<button className="btn btn-square btn-ghost btn-sm ">
-										details
-									</button>
+									<button className="btn btn-sm ">details</button>
 								</Link>
 							</th>
 							<th>
@@ -186,39 +155,47 @@ const Index = () => {
 			<main className="container mx-auto max-w-7xl my-5">
 				{/* ################# MODAL ################# */}
 				<ConfirmationModal
-					isOpen={isModalOpen}
+					isOpen={modal.isModalOpen}
 					onClose={closeModal}
 					onConfirm={handleDeleteConfirmation}
-					title="Are you sure you want to delete the selected lecturers?"
+					title="Are you sure you want to delete the selected courses?"
 				>
 					lecturers with enrollments will have their enrollments deleted as
 					well.
 				</ConfirmationModal>
+				<AlertBanner
+					isOpen={alert.isOpen}
+					onClose={closeAlert}
+					status={alert.type}
+					title={alert.message}
+				/>
 				{/* ############### MODAL END ############### */}
 
 				<section className=" bg-base-300 rounded-2xl p-5 ">
-					<h2 className="text-3xl">All Courses</h2>
+					<div className="flex justify-between">
+						<h2 className="text-3xl">All Lecturers</h2>
 
-					<div className="overflow-x-auto ">
-						<div className="flex-none"></div>
-						<button onClick={openModal} className="btn btn-error flex flex-1">
-							Delete Selected
-						</button>
-						<table className="table ">
-							<thead>
-								<tr>
-									<th>Select</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody className="prose">
-								{loading ? courseSkeletons : lecturerList}
-							</tbody>
-						</table>
+						<div className="overflow-x-auto ">
+							<div className="flex-none"></div>
+							<button onClick={openModal} className="btn btn-error flex flex-1">
+								Delete Selected
+							</button>
+						</div>
 					</div>
+					<table className="table ">
+						<thead>
+							<tr>
+								<th>Select</th>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Phone</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody className="prose">
+							{loading ? courseSkeletons : lecturerList}
+						</tbody>
+					</table>
 				</section>
 			</main>
 		</>

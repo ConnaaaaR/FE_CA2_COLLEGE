@@ -9,7 +9,6 @@ import SkeletonRow from "../../components/SkeletonRow";
 import AlertBanner from "../../components/AlertBanner";
 
 const Index = () => {
-	const { authenticated } = useAuth();
 	const { alert, closeAlert } = useAlert();
 	const [enrolments, setEnrolments] = useState([]);
 	const [selectedEnrolments, setSelectedEnrolments] = useState([]);
