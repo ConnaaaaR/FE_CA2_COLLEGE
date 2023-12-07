@@ -14,7 +14,7 @@ const Create = () => {
 	const [errors, setErrors] = useState({});
 	const [courses, setCourses] = useState([]);
 	const [lecturers, setLecturers] = useState([]);
-	
+
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -26,6 +26,7 @@ const Create = () => {
 			.catch((error) => {
 				console.error("Error fetching courses", error);
 			});
+
 		axios
 			.get("/lecturers")
 			.then((response) => {
@@ -35,7 +36,7 @@ const Create = () => {
 				console.error("Error fetching lecturers", error);
 			});
 	}, [token]);
-
+	console.log(courses);
 	const handleForm = (e) => {
 		setForm((prevState) => ({
 			...prevState,

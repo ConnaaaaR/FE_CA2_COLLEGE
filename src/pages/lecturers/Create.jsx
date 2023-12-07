@@ -55,58 +55,72 @@ const Create = () => {
 	};
 
 	return (
-		<form onSubmit={submitForm}>
-			<div>
-				name:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.name}
-					name="name"
-				/>
-			</div>
-			{errors.name && <span className="text-error">{errors.name}</span>}
-			<div>
-				address:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.address}
-					name="address"
-				/>
-			</div>
-			{errors.email && <span className="text-error">{errors.email}</span>}
-			<div>
-				Phone:{" "}
-				<input
-					id="phone"
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.phone}
-					name="phone"
-					placeholder="0xx-xxxxxxx"
-					required
-				/>
-			</div>
-			{errors.phone && <span className="text-error">{errors.phone}</span>}
-			<div>
-				email:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="email"
-					onChange={handleForm}
-					value={form.email}
-					name="email"
-				/>
-			</div>
+		<div className="rounded-xl bg-base-300 w-1/2">
+			<form
+				onSubmit={submitForm}
+				className="form-control mx-auto w-100 max-w-md"
+			>
+				<h2 className="text-xl p-5 text-center">Create New Lecturer</h2>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Name:</span>
+					</label>
+					<input
+						className="input input-bordered w-full"
+						type="text"
+						onChange={handleForm}
+						value={form.name}
+						name="name"
+					/>
+				</div>
+				{errors.name && <span className="text-error">{errors.name}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Address:</span>
+					</label>
+					<input
+						className="input input-bordered w-full"
+						type="text"
+						onChange={handleForm}
+						value={form.address}
+						name="address"
+					/>
+				</div>
+				{errors.address && <span className="text-error">{errors.address}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Phone:</span>
+					</label>
+					<input
+						id="phone"
+						className="input input-bordered w-full"
+						type="text"
+						onChange={handleForm}
+						value={form.phone}
+						name="phone"
+						placeholder="0xx-xxxxxxx"
+					/>
+				</div>
+				{errors.phone && <span className="text-error">{errors.phone}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Email:</span>
+					</label>
+					<input
+						className="input input-bordered w-full"
+						type="email"
+						onChange={handleForm}
+						value={form.email}
+						name="email"
+					/>
+				</div>
+				{errors.email && <span className="text-error">{errors.email}</span>}
 
-			<button type="submit" className="btn btn-outline">
-				Submit
-			</button>
-		</form>
+				<button className="btn my-5 btn-primary" type="submit">
+					Submit
+				</button>
+			</form>
+		</div>
 	);
 };
 

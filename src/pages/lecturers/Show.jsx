@@ -141,7 +141,7 @@ const Show = () => {
 							</div>
 						</div>
 					</div>
-					{authenticated && (
+					{authenticated && lecturer.enrolments.length > 0 && (
 						<table className="table">
 							<thead>
 								<tr>

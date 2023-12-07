@@ -7,7 +7,7 @@ const Create = () => {
 	const navigate = useNavigate();
 	const { showAlert } = useAlert();
 	const [form, setForm] = useState({});
-	const [errors, setErrors] = useState();
+	const [errors, setErrors] = useState({});
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
@@ -65,72 +65,89 @@ const Create = () => {
 	};
 
 	return (
-		<form onSubmit={submitForm}>
-			<div>
-				title:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.title}
-					name="title"
-				/>
-			</div>
-			{errors.title && <span className="text-error">{errors.title}</span>}
-			<div>
-				description:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.description}
-					name="description"
-				/>
-			</div>
-			{errors.description && (
-				<span className="text-error">{errors.description}</span>
-			)}
-			<div>
-				code:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.code}
-					name="code"
-					pattern="^[A-Za-z]{2}\d{3}$"
-					title="Code must be in the format AA123"
-				/>
-			</div>
-			{errors.code && <span className="text-error">{errors.code}</span>}
-			<div>
-				points:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="number"
-					onChange={handleForm}
-					value={form.points}
-					name="points"
-				/>
-			</div>
-			<div>
-				level:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="number"
-					onChange={handleForm}
-					value={form.level}
-					name="level"
-					min="7"
-					step="1"
-					required
-				/>
-			</div>
-			{errors.level && <span className="text-error">{errors.level}</span>}
-			<button type="submit" className="btn btn-outline">
-				Submit
-			</button>
-		</form>
+		<div className="rounded-xl bg-base-300 w-1/2">
+			<h2 className="text-xl p-5 text-center">Create New Course</h2>
+
+			<form
+				onSubmit={submitForm}
+				className="form-control mx-auto w-100 max-w-md"
+			>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Title:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.title}
+						name="title"
+					/>
+				</div>
+				{errors.title && <span className="text-error">{errors.title}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Description:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.description}
+						name="description"
+					/>
+				</div>
+				{errors.description && (
+					<span className="text-error">{errors.description}</span>
+				)}
+				<div className="form-group[">
+					<label className="label">
+						<span className="label-text">Code:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.code}
+						name="code"
+						pattern="^[A-Za-z]{2}\d{3}$"
+						title="Code must be in the format AA123"
+					/>
+				</div>
+				{errors.code && <span className="text-error">{errors.code}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Points:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="number"
+						onChange={handleForm}
+						value={form.points}
+						name="points"
+					/>
+				</div>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Level:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="number"
+						onChange={handleForm}
+						value={form.level}
+						name="level"
+						min="7"
+						step="1"
+						required
+					/>
+				</div>
+				{errors.level && <span className="text-error">{errors.level}</span>}
+				<button className="btn my-5 btn-primary" type="submit">
+					Create Enrolment
+				</button>
+			</form>
+		</div>
 	);
 };
 

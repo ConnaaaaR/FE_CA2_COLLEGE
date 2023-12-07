@@ -36,20 +36,15 @@ const Show = () => {
 						</td>
 						<td>{enrolment.status}</td>
 						<td className="flex gap-2">
-							<button
-								onClick={() => {
-									console.log("pressed");
-									axios.delete(`/enrolments/${enrolment.id}`).catch((err) => {
-										console.error(err);
-									});
-								}}
-								className="btn btn-square btn-warning"
-							>
-								<img
-									src="/editIcon.svg"
-									alt="edit icon, represented by a pencil."
-								/>
+							<button className="btn btn-warning btn-sm ">
+								<Link to={`/courses/${course.id}/edit`}>
+									<img
+										src="/editIcon.svg"
+										alt="edit icon, represented by a pencil."
+									/>
+								</Link>
 							</button>
+
 							<button className="btn  btn-square btn-error">
 								<img
 									src="/deleteIcon.svg"
@@ -126,7 +121,7 @@ const Show = () => {
 					</div>
 				</div>
 			</div>
-			<div className="container mx-auto rounded-2xl max-w-7xl bg-base-200 p-4">
+			<div className="container mx-auto  max-w-7xl  p-4">
 				{/* ################# MODAL ################# */}
 				<ConfirmationModal
 					isOpen={modal.isModalOpen}
@@ -137,8 +132,8 @@ const Show = () => {
 					Courses with enrollments will have their enrollments deleted as well.
 				</ConfirmationModal>
 
-				{authenticated && (
-					<div className="overflow-x-auto mt-5">
+				{authenticated && course.enrolments.length > 0 && (
+					<div className="overflow-x-auto mt-5 bg-base-200 rounded-2xl px-2">
 						<h2>Enrollments</h2>
 						<table className="table w-full">
 							<thead>

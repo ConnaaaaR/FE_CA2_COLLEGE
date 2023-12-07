@@ -24,7 +24,7 @@ const Home = () => {
 		return i;
 	};
 
-	useEffect(() => {
+	const fetchData = () => {
 		setLoading(true);
 		axios
 			.get("/courses")
@@ -51,6 +51,10 @@ const Home = () => {
 				console.error("there was an error: ", err);
 			});
 		setLoading(false);
+	};
+
+	useEffect(() => {
+		fetchData();
 	}, []);
 
 	if (loading)
@@ -65,21 +69,33 @@ const Home = () => {
 					<div className="card rounded-xl bg-base-300 hover:bg-base-200">
 						<div className="card-body">
 							<div className="card-title">Number of courses</div>
-							{courses?.length}
+							{courses ? (
+								courses.length
+							) : (
+								<span className="loading loading-spinner loading-lg"></span>
+							)}
 						</div>
 					</div>
 					<div className="card rounded-xl bg-base-300 hover:bg-base-200">
 						<div className="card-body">
 							<div className="card-title">Number of Lecturers</div>
-							{lecturers?.length}
+							{lecturers ? (
+								lecturers.length
+							) : (
+								<span className="loading loading-spinner loading-lg"></span>
+							)}
 						</div>
 					</div>
 					<div className="card rounded-xl bg-base-300 hover:bg-base-200">
 						<div className="card-body">
 							<div className="card-title">
-								Number of Active Enrollments Created in the last 10 days
+								Active Enrollments Created in last 10 days
 							</div>
-							{enrollments ? countEnrollments(enrollments) : ""}
+							{enrollments ? (
+								countEnrollments(enrollments)
+							) : (
+								<span className="loading loading-spinner loading-lg"></span>
+							)}
 						</div>
 					</div>
 				</main>
