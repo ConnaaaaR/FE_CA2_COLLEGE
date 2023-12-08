@@ -30,7 +30,7 @@ const Navbar = () => {
 				<div className="flex-1">
 					<Link to="/" className="btn btn-ghost text-xl font-normal">
 						class
-						<span className="bg-info rounded p-1 font-bold text-neutral-content">
+						<span className="bg-neutral rounded p-1 font-bold text-neutral-content">
 							Coord
 						</span>
 					</Link>

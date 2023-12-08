@@ -18,8 +18,6 @@ const Index = () => {
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
 
-	let token = localStorage.getItem("token");
-
 	useEffect(() => {
 		setLoading(true);
 		axios

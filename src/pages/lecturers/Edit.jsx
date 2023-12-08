@@ -14,7 +14,7 @@ const Edit = () => {
 		phone: "",
 		email: "",
 	});
-	const [errors, setErrors] = useState();
+	const [errors, setErrors] = useState({});
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -83,55 +83,69 @@ const Edit = () => {
 	if (!lecturer) return <h3>Course not found!</h3>;
 
 	return (
-		<form onSubmit={submitForm}>
-			<div>
-				Name:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.name}
-					name="name"
-				/>
-			</div>
-			{errors.name && <span className="text-error">{errors.name}</span>}
-			<div>
-				Address:{" "}
-				<textarea
-					className="textarea textarea-bordered h-40 w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.address}
-					name="address"
-				/>
-			</div>
-			{errors.address && <span className="text-error">{errors.address}</span>}
-			<div>
-				Phone:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.phone}
-					name="phone"
-				/>
-			</div>
-			{errors.phone && <span className="text-error">{errors.phone}</span>}
-			<div>
-				Email:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.email}
-					name="email"
-				/>
-			</div>
-			{errors.email && <span className="text-error">{errors.email}</span>}
-			<button type="submit" className="btn btn-outline">
-				Update Lecturer
-			</button>
-		</form>
+		<div className="rounded-xl bg-base-300 w-1/2">
+			<h2 className="text-xl p-5 text-center">Update Existing Lecturer</h2>
+			<form
+				onSubmit={submitForm}
+				className="form-control mx-auto w-100 max-w-md"
+			>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Name:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.name}
+						name="name"
+					/>
+				</div>
+				{errors.name && <span className="text-error">{errors.name}</span>}
+				<div>
+					<label className="label">
+						<span className="label-text">Address:</span>
+					</label>
+					<textarea
+						className="textarea textarea-bordered h-40 w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.address}
+						name="address"
+					/>
+				</div>
+				{errors.address && <span className="text-error">{errors.address}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Phone:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.phone}
+						name="phone"
+					/>
+				</div>
+				{errors.phone && <span className="text-error">{errors.phone}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Email:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.email}
+						name="email"
+					/>
+				</div>
+				{errors.email && <span className="text-error">{errors.email}</span>}
+				<button type="submit" className="btn my-5 btn-primary">
+					Update Lecturer
+				</button>
+			</form>
+		</div>
 	);
 };
 

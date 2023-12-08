@@ -24,6 +24,13 @@ const Home = () => {
 		return i;
 	};
 
+	const enrollmentsChange = () => {
+		let newEnrol = countEnrollments(enrollments);
+		let totEnrol = enrollments.length;
+
+		return (newEnrol / totEnrol) * 100;
+	};
+
 	const fetchData = () => {
 		setLoading(true);
 		axios
@@ -65,37 +72,74 @@ const Home = () => {
 			{!authenticated ? (
 				<LoginForm />
 			) : (
-				<main className="mx-auto flex gap-1 max-w-7xl my-5">
-					<div className="card rounded-xl bg-base-300 hover:bg-base-200">
-						<div className="card-body">
-							<div className="card-title">Number of courses</div>
-							{courses ? (
-								courses.length
-							) : (
-								<span className="loading loading-spinner loading-lg"></span>
-							)}
-						</div>
-					</div>
-					<div className="card rounded-xl bg-base-300 hover:bg-base-200">
-						<div className="card-body">
-							<div className="card-title">Number of Lecturers</div>
-							{lecturers ? (
-								lecturers.length
-							) : (
-								<span className="loading loading-spinner loading-lg"></span>
-							)}
-						</div>
-					</div>
-					<div className="card rounded-xl bg-base-300 hover:bg-base-200">
-						<div className="card-body">
-							<div className="card-title">
-								Active Enrollments Created in last 10 days
+				<main className="mx-auto gap-1 max-w-7xl my-5">
+					<h1 className="">Data Statistics</h1>
+					<div className="stats shadow">
+						<div className="stat place-content-center bg-base-300 hover:bg-base-200">
+							<div className="stat-body">
+								<div className="stat-title">Number of courses</div>
+								{courses ? (
+									<>
+										<div className="stat-value  text-primary hover:text-neutral">
+											{courses.length}
+										</div>
+										<div className="stat-desc">Total</div>
+									</>
+								) : (
+									<span className="loading loading-spinner loading-lg"></span>
+								)}
 							</div>
-							{enrollments ? (
-								countEnrollments(enrollments)
-							) : (
-								<span className="loading loading-spinner loading-lg"></span>
-							)}
+						</div>
+						<div className="stat place-items-center bg-base-300 hover:bg-base-200">
+							<div className="stat-body">
+								<div className="stat-title">Number of Lecturers</div>
+								{lecturers ? (
+									<>
+										<div className="stat-value  text-primary hover:text-neutral">
+											{lecturers.length}
+										</div>
+										<div className="stat-desc">Total</div>
+									</>
+								) : (
+									<span className="loading loading-spinner loading-lg"></span>
+								)}
+							</div>
+						</div>
+						<div className="stat place-items-center bg-base-300 hover:bg-base-200">
+							<div className="stat-body">
+								<div className="stat-title">Active Enrollments</div>
+								{enrollments ? (
+									<>
+										<div className="stat-value mx-auto text-primary hover:text-neutral">
+											{countEnrollments(enrollments)}
+										</div>
+										<div className="stat-desc">Created in last 10 days</div>
+									</>
+								) : (
+									<span className="loading loading-spinner loading-lg"></span>
+								)}
+							</div>
+						</div>
+						<div className="stat place-items-center bg-base-300 hover:bg-base-200">
+							<div className="stat-body">
+								<div className="stat-title">Enrollments Percentage</div>
+								{enrollments ? (
+									<>
+										<div
+											className="radial-progress text-primary hover:text-neutral"
+											style={{ "--value": Math.round(enrollmentsChange()) }}
+											role="progressbar"
+										>
+											{Math.round(enrollmentsChange())}%
+										</div>
+										<div className="stat-desc">
+											percent of total created in last 10 days
+										</div>
+									</>
+								) : (
+									<span className="loading loading-spinner loading-lg"></span>
+								)}
+							</div>
 						</div>
 					</div>
 				</main>
