@@ -15,15 +15,12 @@ const Edit = () => {
 		email: "",
 	});
 	const [errors, setErrors] = useState({});
-	const token = localStorage.getItem("token");
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
+		setLoading(true);
 		axios
-			.get(`/lecturers/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(`/lecturers/${id}`)
 			.then((response) => {
 				setLecturer(response.data.data);
 				setForm({
@@ -33,12 +30,19 @@ const Edit = () => {
 					phone: response.data.data.phone,
 					email: response.data.data.email,
 				});
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.error(err.response.data);
 				setErrors(err.response.data.message);
+				setLoading(false);
 			});
-	}, [id, token]);
+	}, [id]);
+
+	const validatePhoneFormat = (phone) => {
+		const regex = /0\d{2}-\d{7}$/;
+		return regex.test(phone);
+	};
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
@@ -48,17 +52,20 @@ const Edit = () => {
 	};
 
 	const isRequired = (fields) => {
+		const validationErrors = {};
 		let isValid = true;
-		let newErrors = {};
 
 		fields.forEach((field) => {
 			if (!form[field]) {
 				isValid = false;
-				newErrors[field] = `${field} is required!`;
+				validationErrors[field] = `${field} is required!`;
+			} else if (field === "phone" && !validatePhoneFormat(form.phone)) {
+				isValid = false;
+				validationErrors[field] = `Phone number must be in 0xx-xxxxxxx format!`;
 			}
 		});
 
-		setErrors(newErrors);
+		setErrors(validationErrors);
 		return isValid;
 	};
 
@@ -80,7 +87,10 @@ const Edit = () => {
 		}
 	};
 
-	if (!lecturer) return <h3>Course not found!</h3>;
+	if (loading)
+		return <span className="loading loading-spinner loading-lg"></span>;
+	if (!loading && !lecturer)
+		return <h3>Error fetching lecturer! Lecturer does not exist.</h3>;
 
 	return (
 		<div className="rounded-xl bg-base-300 w-1/2">

@@ -72,7 +72,7 @@ const Index = () => {
 		return <h3>There are no enrolments!</h3>;
 	const enrolmentList = enrolments.map((enrolment) => {
 		return (
-			<tr key={enrolment.id}>
+			<tr className="hover:bg-base-200" key={enrolment.id}>
 				<th>
 					<label>
 						<input
@@ -88,9 +88,7 @@ const Index = () => {
 				<td>{enrolment.status}</td>
 				<td>
 					<Link to={`/enrolment/${enrolment.id}`}>
-						<button className="btn btn-square btn-ghost btn-sm ">
-							details
-						</button>
+						<button className="btn btn-secondary btn-sm ">details</button>
 					</Link>
 				</td>
 				<td>

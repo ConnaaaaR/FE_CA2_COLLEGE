@@ -16,8 +16,6 @@ const Index = () => {
 	const [selectedCourses, setSelectedCourses] = useState([]);
 	const [loading, setLoading] = useState(false);
 
-	let token = localStorage.getItem("token");
-
 	useEffect(() => {
 		setLoading(true);
 		axios
@@ -46,6 +44,8 @@ const Index = () => {
 	};
 
 	const deleteEnrollmentsAndCourse = async () => {
+		if (selectedCourses.length == 0) return;
+
 		// deletes enrollments, waits for it to complete and then deletes the course
 		setLoading(true);
 		try {
@@ -86,7 +86,7 @@ const Index = () => {
 			<>
 				{authenticated ? (
 					<>
-						<tr key={course.id}>
+						<tr className="hover:bg-base-200" key={course.id}>
 							<th>
 								<label>
 									<input

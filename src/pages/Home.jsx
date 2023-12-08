@@ -74,8 +74,8 @@ const Home = () => {
 			) : (
 				<main className="mx-auto gap-1 max-w-7xl my-5">
 					<h1 className="">Data Statistics</h1>
-					<div className="stats shadow">
-						<div className="stat place-content-center bg-base-300 hover:bg-base-200">
+					<div className="stats stats-vertical lg:stats-horizontal shadow">
+						<div className="stat place-items-center bg-base-300 hover:bg-base-200">
 							<div className="stat-body">
 								<div className="stat-title">Number of courses</div>
 								{courses ? (

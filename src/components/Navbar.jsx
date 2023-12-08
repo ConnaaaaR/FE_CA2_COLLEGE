@@ -26,8 +26,8 @@ const Navbar = () => {
 
 	return (
 		<>
-			<div className="navbar bg-base-100">
-				<div className="flex-1">
+			<div className="navbar bg-base-100 justify-evenly">
+				<div className=" md:flex-1 hidden md:inline-flex">
 					<Link to="/" className="btn btn-ghost text-xl font-normal">
 						class
 						<span className="bg-neutral rounded p-1 font-bold text-neutral-content">
@@ -36,6 +36,13 @@ const Navbar = () => {
 					</Link>
 				</div>
 				<div className="flex-none gap-8">
+					{authenticated ? (
+						<button className="btn btn-outline" onClick={logout}>
+							Logout
+						</button>
+					) : (
+						""
+					)}
 					<div className="flex-none gap-8">
 						<label
 							className="flex cursor-pointer gap-2 "
@@ -82,13 +89,24 @@ const Navbar = () => {
 							</svg>
 						</label>
 					</div>
-					{authenticated ? (
-						<button className="btn btn-outline" onClick={logout}>
-							Logout
-						</button>
-					) : (
-						""
-					)}
+					<label
+						htmlFor="my-drawer-2"
+						className="btn btn-ghost drawer-button lg:hidden"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							className="inline-block w-5 h-5 stroke-current"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M4 6h16M4 12h16M4 18h16"
+							></path>
+						</svg>
+					</label>
 				</div>
 			</div>
 		</>

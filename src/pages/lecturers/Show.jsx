@@ -120,9 +120,9 @@ const Show = () => {
 					status={alert.type}
 					title={alert.message}
 				/>
-				<section className="bg-primary mt-2 rounded-2xl p-5">
-					<div className="card w-96 bg-base-100 shadow-xl mx-auto">
-						<div className="card-body">
+				<section className="bg-primary w-full  mt-2 rounded-2xl p-3">
+					<div className="card w-full  bg-base-100 shadow-xl mx-auto">
+						<div className="card-body ">
 							<h2 className="card-title">{lecturer.name}</h2>
 							<div className="badge badge-outline badge-secondary">
 								{lecturer.email}

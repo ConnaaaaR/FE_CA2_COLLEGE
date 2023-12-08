@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAlert } from "../../contexts/AlertContext";
-
 import axios from "../../config/api";
 
 const Edit = () => {
@@ -16,7 +15,7 @@ const Edit = () => {
 		points: "",
 		level: "",
 	});
-	const [errors, setErrors] = useState();
+	const [errors, setErrors] = useState({});
 
 	useEffect(() => {
 		axios
@@ -76,67 +75,89 @@ const Edit = () => {
 	if (!course) return <h3>Course not found!</h3>;
 
 	return (
-		<form className="bg-base-200 p-16 rounded-2xl" onSubmit={submitForm}>
-			<div>
-				Title:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.title}
-					name="title"
-				/>
-			</div>
-			{errors.title && <span className="text-error">{errors.title}</span>}
-			<div>
-				Description:{" "}
-				<textarea
-					className="textarea h-40 textarea-bordered w-full max-w-xs"
-					type="textarea"
-					onChange={handleForm}
-					value={form.description}
-					name="description"
-				/>
-			</div>
-			{errors.description && (
-				<span className="text-error">{errors.description}</span>
-			)}
-			<div>
-				Code:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.code}
-					name="code"
-				/>
-			</div>
-			{errors.code && <span className="text-error">{errors.code}</span>}
-			<div>
-				Points:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.points}
-					name="points"
-				/>
-			</div>
-			<div>
-				Level:{" "}
-				<input
-					className="input input-bordered w-full max-w-xs"
-					type="text"
-					onChange={handleForm}
-					value={form.level}
-					name="level"
-				/>
-			</div>
-			{errors.level && <span className="text-error">{errors.level}</span>}
-			<button type="submit" className="btn btn-outline mt-5">
-				Submit
-			</button>
-		</form>
+		<div className="rounded-xl p-2 bg-base-300 w-full sm:w-1/2">
+			<h2 className="text-xl p-5 text-center">Edit Existing Course</h2>
+
+			<form
+				onSubmit={submitForm}
+				className="form-control mx-auto w-100 max-w-md"
+			>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Title:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.title}
+						name="title"
+					/>
+				</div>
+				{errors.title && <span className="text-error">{errors.title}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Description:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.description}
+						name="description"
+					/>
+				</div>
+				{errors.description && (
+					<span className="text-error">{errors.description}</span>
+				)}
+				<div className="form-group[">
+					<label className="label">
+						<span className="label-text">Code:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="text"
+						onChange={handleForm}
+						value={form.code}
+						name="code"
+						pattern="^[A-Za-z]{2}\d{3}$"
+						title="Code must be in the format AA123"
+					/>
+				</div>
+				{errors.code && <span className="text-error">{errors.code}</span>}
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Points:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="number"
+						onChange={handleForm}
+						value={form.points}
+						name="points"
+					/>
+				</div>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Level:</span>
+					</label>
+					<input
+						className="input input-bordered w-full "
+						type="number"
+						onChange={handleForm}
+						value={form.level}
+						name="level"
+						min="7"
+						step="1"
+						required
+					/>
+				</div>
+				{errors.level && <span className="text-error">{errors.level}</span>}
+				<button className="btn my-5 btn-primary" type="submit">
+					Edit Course
+				</button>
+			</form>
+		</div>
 	);
 };
 

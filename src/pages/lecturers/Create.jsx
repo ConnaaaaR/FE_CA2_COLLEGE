@@ -7,7 +7,6 @@ const Create = () => {
 	const navigate = useNavigate();
 	const [form, setForm] = useState({});
 	const [errors, setErrors] = useState({});
-	const token = localStorage.getItem("token");
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({

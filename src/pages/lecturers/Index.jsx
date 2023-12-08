@@ -52,11 +52,9 @@ const Index = () => {
 				for (const enrollment of lecturer.enrolments) {
 					await axios.delete(`/enrolments/${enrollment.id}`);
 				}
-				await axios
-					.delete(`/lecturers/${lecturerId}`)
-					.catch((err) => {
-						console.log(err.response.data);
-					});
+				await axios.delete(`/lecturers/${lecturerId}`).catch((err) => {
+					console.log(err.response.data);
+				});
 			}
 
 			setLecturers(
@@ -84,7 +82,7 @@ const Index = () => {
 			<>
 				{authenticated ? (
 					<>
-						<tr key={lecturer.id}>
+						<tr className="hover:bg-base-200" o key={lecturer.id}>
 							<th>
 								<label>
 									<input
@@ -123,7 +121,7 @@ const Index = () => {
 
 							<th>
 								<Link to={`/lecturer/${lecturer.id}`}>
-									<button className="btn btn-sm ">details</button>
+									<button className="btn btn-secondary btn-sm ">details</button>
 								</Link>
 							</th>
 							<th>

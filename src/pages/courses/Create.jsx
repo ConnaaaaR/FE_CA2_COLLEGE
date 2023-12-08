@@ -65,7 +65,7 @@ const Create = () => {
 	};
 
 	return (
-		<div className="rounded-xl bg-base-300 w-1/2">
+		<div className="rounded-xl p-2 bg-base-300 w-full sm:w-1/2">
 			<h2 className="text-xl p-5 text-center">Create New Course</h2>
 
 			<form
@@ -144,7 +144,7 @@ const Create = () => {
 				</div>
 				{errors.level && <span className="text-error">{errors.level}</span>}
 				<button className="btn my-5 btn-primary" type="submit">
-					Create Enrolment
+					Create Course
 				</button>
 			</form>
 		</div>

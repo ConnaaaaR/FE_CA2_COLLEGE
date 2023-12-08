@@ -114,99 +114,87 @@ const Edit = () => {
 		return inc;
 	};
 
-	const submitForm = (e) => {
-		e.preventDefault();
-
-		if (isRequired(["title", "description", "code", "points", "level"])) {
-			axios
-				.put(`/enrolments/${id}`, form)
-				.then((response) => {
-					showAlert("success", "Enrollment Updated Successfully!");
-					navigate(`/enrolment/${id}`);
-				})
-				.catch((err) => {
-					console.error(err.response.data.message);
-				});
-		}
-	};
-
 	if (loading)
 		return <span className="loading loading-spinner loading-lg"></span>;
 	if (!loading && !enrolment)
 		return <h3>Error fetching enrolment! Enrolment does not exist.</h3>;
 
 	return (
-		<form
-			onSubmit={handleSubmit}
-			className="form-control mx-auto w-100 max-w-md"
-		>
-			<div className="form-group ">
-				<label className="label">
-					<span className="label-text">Status:</span>
-				</label>
-				<select
-					className="select select-bordered w-full"
-					name="status"
-					value={form.status}
-					onChange={handleForm}
-				>
-					<option value="">Select Status</option>
-					<option value="assigned">Assigned</option>
-					<option value="career_break">Career Break</option>
-					<option value="interested">Interested</option>
-					<option value="associate">Associate</option>
-				</select>
-				{errors.status && <span className="text-error">{errors.status}</span>}
-			</div>
+		<div className="rounded-xl p-2 bg-base-300 w-full sm:w-1/2">
+			<h2 className="text-xl p-5 text-center">Update Existing Enrollment</h2>
 
-			<div className="form-group ">
-				<label className="label">
-					<span className="label-text">Course:</span>
-				</label>
-				<select
-					className="select select-bordered w-full"
-					name="course_id"
-					value={form.course_id}
-					onChange={handleForm}
-				>
-					<option value="">Select a Course</option>
-					{courses?.map((course) => (
-						<option key={course.id} value={course.id}>
-							{course.title}
-						</option>
-					))}
-				</select>
-				{errors.course_id && (
-					<span className="text-error">{errors.course_id}</span>
-				)}
-			</div>
+			<form
+				onSubmit={handleSubmit}
+				className="form-control mx-autow-100 max-w-md"
+			>
+				<div className="form-group ">
+					<label className="label">
+						<span className="label-text">Status:</span>
+					</label>
+					<select
+						className="select select-bordered w-full"
+						name="status"
+						value={form.status}
+						onChange={handleForm}
+					>
+						<option value="">Select Status</option>
+						<option value="assigned">Assigned</option>
+						<option value="career_break">Career Break</option>
+						<option value="interested">Interested</option>
+						<option value="associate">Associate</option>
+					</select>
+					{errors.status && <span className="text-error">{errors.status}</span>}
+				</div>
 
-			<div className="form-group">
-				<label className="label">
-					<span className="label-text">Lecturer:</span>
-				</label>
-				<select
-					className="select select-bordered w-full"
-					name="lecturer_id"
-					value={form.lecturer_id}
-					onChange={handleForm}
-				>
-					<option value="">Select a Lecturer</option>
-					{lecturers?.map((lecturer) => (
-						<option key={lecturer.id} value={lecturer.id}>
-							{lecturer.name}
-						</option>
-					))}
-				</select>
-				{errors.lecturer_id && (
-					<span className="text-error">{errors.lecturer_id}</span>
-				)}
-			</div>
+				<div className="form-group ">
+					<label className="label">
+						<span className="label-text">Course:</span>
+					</label>
+					<select
+						className="select select-bordered w-full"
+						name="course_id"
+						value={form.course_id}
+						onChange={handleForm}
+					>
+						<option value="">Select a Course</option>
+						{courses?.map((course) => (
+							<option key={course.id} value={course.id}>
+								{course.title}
+							</option>
+						))}
+					</select>
+					{errors.course_id && (
+						<span className="text-error">{errors.course_id}</span>
+					)}
+				</div>
 
-			<button className="btn my-5 btn-primary" type="submit">
-				Edit Enrolment
-			</button>
-		</form>
+				<div className="form-group">
+					<label className="label">
+						<span className="label-text">Lecturer:</span>
+					</label>
+					<select
+						className="select select-bordered w-full"
+						name="lecturer_id"
+						value={form.lecturer_id}
+						onChange={handleForm}
+					>
+						<option value="">Select a Lecturer</option>
+						{lecturers?.map((lecturer) => (
+							<option key={lecturer.id} value={lecturer.id}>
+								{lecturer.name}
+							</option>
+						))}
+					</select>
+					{errors.lecturer_id && (
+						<span className="text-error">{errors.lecturer_id}</span>
+					)}
+				</div>
+
+				<button className="btn my-5 btn-primary" type="submit">
+					Edit Enrolment
+				</button>
+			</form>
+		</div>
 	);
 };
 
