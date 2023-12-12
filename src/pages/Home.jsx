@@ -61,8 +61,8 @@ const Home = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
-	}, []);
+		if (authenticated) fetchData();
+	}, [authenticated]);
 
 	if (loading)
 		return <span className="loading loading-spinner loading-lg"></span>;

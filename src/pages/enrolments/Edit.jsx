@@ -54,7 +54,7 @@ const Edit = () => {
 			.catch((error) => {
 				console.error("Error fetching lecturers", error);
 			});
-	}, [token]);
+	}, []);
 
 	const handleForm = (e) => {
 		setForm((prevState) => ({
@@ -71,29 +71,6 @@ const Edit = () => {
 	const getTimeStamp = () => {
 		const now = new Date();
 		return now.toTimeString().split(" ")[0];
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-		const timeStampedForm = {
-			...form,
-			date: getDateStamp(),
-			time: getTimeStamp(),
-		};
-		axios
-			.put(`/enrolments/${id}`, timeStampedForm)
-			.then(() => {
-				showAlert("success", "Enrolment Updated Successfully!");
-				navigate("/enrolments");
-			})
-			.catch((error) => {
-				if (error.response && error.response.data.errors) {
-					setErrors(error.response.data.errors);
-				} else {
-					console.error("An unexpected error occurred", error);
-				}
-			});
 	};
 
 	const isRequired = (fields) => {
@@ -114,6 +91,31 @@ const Edit = () => {
 		return inc;
 	};
 
+	const submitForm = (e) => {
+		e.preventDefault();
+
+		if (isRequired(["status", "course_id", "lecturer_id"])) {
+			const timeStampedForm = {
+				...form,
+				date: getDateStamp(),
+				time: getTimeStamp(),
+			};
+			axios
+				.put(`/enrolments/${id}`, timeStampedForm)
+				.then(() => {
+					showAlert("success", "Enrollment Updated Successfully!");
+					navigate(`/enrolment/${id}`);
+				})
+				.catch((error) => {
+					if (error.response && error.response.data.errors) {
+						setErrors(error.response.data.errors);
+					} else {
+						console.error("An unexpected error occurred", error);
+					}
+				});
+		}
+	};
+
 	if (loading)
 		return <span className="loading loading-spinner loading-lg"></span>;
 	if (!loading && !enrolment)
@@ -124,7 +126,7 @@ const Edit = () => {
 			<h2 className="text-xl p-5 text-center">Update Existing Enrollment</h2>
 
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={submitForm}
 				className="form-control mx-autow-100 max-w-md"
 			>
 				<div className="form-group ">
