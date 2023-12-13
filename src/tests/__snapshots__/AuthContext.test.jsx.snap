@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthProvider sets authenticated state to false if token does not exist in localStorage 1`] = `
+<div>
+  Test
+</div>
+`;
+
+exports[`AuthProvider sets authenticated state to true if token exists in localStorage 1`] = `
+<div>
+  Test
+</div>
+`;
