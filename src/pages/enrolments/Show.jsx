@@ -13,8 +13,7 @@ const Show = () => {
 
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
-	const { alert, showAlert, closeAlert, modal, openModal, closeModal } =
-		useAlert();
+	const { alert, closeAlert, modal, openModal, closeModal } = useAlert();
 
 	useEffect(() => {
 		axios

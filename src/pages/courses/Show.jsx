@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { useAlert } from "../../contexts/AlertContext";
+import EnrolmentRow from "../../components/EnrolmentRow";
 import AlertBanner from "../../components/AlertBanner";
 
 const Show = () => {
@@ -16,47 +17,6 @@ const Show = () => {
 	const [course, setCourse] = useState(null);
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
-
-	const EnrolmentRow = ({ enrolment, isAuthenticated }) => {
-		return (
-			<tr key={enrolment.id}>
-				{isAuthenticated && (
-					<>
-						<td>
-							<label>
-								<input type="checkbox" className="checkbox checkbox-primary" />
-							</label>
-						</td>
-						<td>{enrolment.id}</td>
-						<td className="text-secondary">
-							{new Date(enrolment.created_at).toLocaleDateString(undefined, {
-								dateStyle: "medium",
-							})}
-							{" " + enrolment.time}
-						</td>
-						<td>{enrolment.status}</td>
-						<td className="flex gap-2">
-							<button className="btn btn-warning btn-sm ">
-								<Link to={`/courses/${course.id}/edit`}>
-									<img
-										src="/editIcon.svg"
-										alt="edit icon, represented by a pencil."
-									/>
-								</Link>
-							</button>
-
-							<button className="btn  btn-square btn-error">
-								<img
-									src="/deleteIcon.svg"
-									alt="delete icon, represented by a pencil."
-								/>
-							</button>
-						</td>
-					</>
-				)}
-			</tr>
-		);
-	};
 
 	useEffect(() => {
 		axios
@@ -150,6 +110,8 @@ const Show = () => {
 									<EnrolmentRow
 										enrolment={enrolment}
 										isAuthenticated={authenticated}
+										course={course}
+										
 									/>
 								))}
 							</tbody>

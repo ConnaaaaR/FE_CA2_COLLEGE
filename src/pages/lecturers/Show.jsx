@@ -5,6 +5,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { useAlert } from "../../contexts/AlertContext";
 import AlertBanner from "../../components/AlertBanner";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import EnrolmentRow from "../../components/EnrolmentRow";
 
 const Show = () => {
 	const { id } = useParams();
@@ -14,18 +15,9 @@ const Show = () => {
 		useAlert();
 
 	const [lecturer, setLecturer] = useState(null);
-	const [selectedEnrolments, setSelectedEnrolments] = useState([]);
 
 	const token = localStorage.getItem("token");
 	const { authenticated } = useAuth();
-
-	const toggleEnrolmentSelection = (enrolmentId) => {
-		setSelectedEnrolments((prevSelectedEnrolments) =>
-			prevSelectedEnrolments.includes(enrolmentId)
-				? prevSelectedEnrolments.filter((id) => id !== enrolmentId)
-				: [...prevSelectedEnrolments, enrolmentId]
-		);
-	};
 
 	const deleteEnrollmentsAndCourse = async () => {
 		// deletes enrollments, waits for it to complete and then deletes the lecturer
@@ -46,14 +38,27 @@ const Show = () => {
 		}
 	};
 
+	const deleteEnrolment = async (enrolmentId) => {
+		try {
+			await axios.delete(`/enrolments/${enrolmentId}`);
+			showAlert("success", "Enrolment deleted successfully!");
+
+			setLecturer((prevLecturer) => ({
+				...prevLecturer,
+				enrolments: prevLecturer.enrolments.filter(
+					(enrolment) => enrolment.id !== enrolmentId
+				),
+			}));
+		} catch (error) {
+			console.error("Deletion error:", error);
+			showAlert("error", "Error occurred while deleting enrolment!");
+		}
+	};
+
 	const handleDeleteConfirmation = () => {
 		closeModal();
 		deleteEnrollmentsAndCourse();
 	};
-
-	useEffect(() => {
-		console.log(selectedEnrolments);
-	}, [selectedEnrolments]);
 
 	useEffect(() => {
 		axios
@@ -65,40 +70,6 @@ const Show = () => {
 				console.error(err.response?.data?.message || "Error fetching data");
 			});
 	}, [id, token]);
-
-	const EnrolmentRow = ({ enrolment, isAuthenticated }) => {
-		return (
-			<tr key={enrolment.id}>
-				{isAuthenticated && (
-					<>
-						<th>
-							<label>
-								<input
-									type="checkbox"
-									className="checkbox checkbox-info"
-									checked={selectedEnrolments.includes(enrolment.id)}
-									onChange={() => toggleEnrolmentSelection(enrolment.id)}
-								/>
-							</label>
-						</th>
-						<td>
-							<div className="flex items-center gap-3 ">
-								<div className="font-bold">{enrolment.course.title}</div>
-								<div className="text-sm opacity-50">
-									{enrolment.course.code}
-								</div>
-							</div>
-						</td>
-						<td>
-							<div className="flex items-center gap-3 ">
-								<div className="font-bold">{enrolment.status}</div>
-							</div>
-						</td>
-					</>
-				)}
-			</tr>
-		);
-	};
 
 	if (!lecturer) return <h3>Lecturer Not Found</h3>;
 
@@ -145,16 +116,18 @@ const Show = () => {
 						<table className="table">
 							<thead>
 								<tr>
-									<th>Select</th>
-									<th>Course Title</th>
+									<th>Points</th>
+									<th>Created At</th>
 									<th>Status</th>
 								</tr>
 							</thead>
 							<tbody className="prose">
 								{lecturer.enrolments.map((enrolment) => (
 									<EnrolmentRow
+										key={enrolment.id}
 										enrolment={enrolment}
 										isAuthenticated={authenticated}
+										deleteEnrolment={deleteEnrolment}
 									/>
 								))}
 							</tbody>

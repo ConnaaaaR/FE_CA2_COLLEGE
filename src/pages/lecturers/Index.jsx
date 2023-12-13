@@ -44,7 +44,6 @@ const Index = () => {
 	};
 
 	const deleteEnrollmentsAndLecturer = async () => {
-		let token = localStorage.getItem("token");
 		// deletes enrollments, waits for it to complete and then deletes the lecturer
 		try {
 			for (const lecturerId of selectedLecturers) {

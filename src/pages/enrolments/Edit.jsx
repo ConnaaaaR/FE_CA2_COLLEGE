@@ -104,7 +104,7 @@ const Edit = () => {
 				.put(`/enrolments/${id}`, timeStampedForm)
 				.then(() => {
 					showAlert("success", "Enrollment Updated Successfully!");
-					navigate(`/enrolment/${id}`);
+					navigate(-1);
 				})
 				.catch((error) => {
 					if (error.response && error.response.data.errors) {
