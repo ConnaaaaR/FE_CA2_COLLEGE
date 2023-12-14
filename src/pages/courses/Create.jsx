@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../contexts/AlertContext";
 import axios from "../../config/api";
 
@@ -17,7 +17,7 @@ const Create = () => {
 	};
 
 	const validateCode = (code) => {
-		const codePattern = /^[A-Za-z]{2}\d{3}$/;
+		const codePattern = /^[A-Z]{2}\d{3}$/;
 		return codePattern.test(code);
 	};
 
@@ -54,7 +54,7 @@ const Create = () => {
 		if (isRequired(["title", "description", "code", "points", "level"])) {
 			axios
 				.post(`/courses/`, form)
-				.then((response) => {
+				.then(() => {
 					showAlert("success", "Course Created Successfully!");
 					navigate(`/courses`);
 				})
