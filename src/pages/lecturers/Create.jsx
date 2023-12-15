@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "../../config/api";
 
@@ -60,34 +60,41 @@ const Create = () => {
 				className="form-control mx-auto w-100 max-w-md"
 			>
 				<h2 className="text-xl p-5 text-center">Create New Lecturer</h2>
+
 				<div className="form-group">
-					<label className="label">
+					<label className="label" htmlFor="name">
 						<span className="label-text">Name:</span>
 					</label>
 					<input
+						id="name"
 						className="input input-bordered w-full"
 						type="text"
 						onChange={handleForm}
 						value={form.name}
 						name="name"
 					/>
+					{errors.name && <span className="text-error">{errors.name}</span>}
 				</div>
-				{errors.name && <span className="text-error">{errors.name}</span>}
+
 				<div className="form-group">
-					<label className="label">
+					<label className="label" htmlFor="address">
 						<span className="label-text">Address:</span>
 					</label>
 					<input
+						id="address"
 						className="input input-bordered w-full"
 						type="text"
 						onChange={handleForm}
 						value={form.address}
 						name="address"
 					/>
+					{errors.address && (
+						<span className="text-error">{errors.address}</span>
+					)}
 				</div>
-				{errors.address && <span className="text-error">{errors.address}</span>}
+
 				<div className="form-group">
-					<label className="label">
+					<label className="label" htmlFor="phone">
 						<span className="label-text">Phone:</span>
 					</label>
 					<input
@@ -99,21 +106,23 @@ const Create = () => {
 						name="phone"
 						placeholder="0xx-xxxxxxx"
 					/>
+					{errors.phone && <span className="text-error">{errors.phone}</span>}
 				</div>
-				{errors.phone && <span className="text-error">{errors.phone}</span>}
+
 				<div className="form-group">
-					<label className="label">
+					<label className="label" htmlFor="email">
 						<span className="label-text">Email:</span>
 					</label>
 					<input
+						id="email"
 						className="input input-bordered w-full"
 						type="email"
 						onChange={handleForm}
 						value={form.email}
 						name="email"
 					/>
+					{errors.email && <span className="text-error">{errors.email}</span>}
 				</div>
-				{errors.email && <span className="text-error">{errors.email}</span>}
 
 				<button className="btn my-5 btn-primary" type="submit">
 					Submit

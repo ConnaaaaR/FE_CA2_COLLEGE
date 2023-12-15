@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import AlertBanner from "../../components/AlertBanner";
 import { useAlert } from "../../contexts/AlertContext";
 import SkeletonRow from "../../components/SkeletonRow";
+import Pagination from "../../components/Pagination";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
 
@@ -13,8 +14,10 @@ const Index = () => {
 	const [lecturers, setLecturers] = useState([]);
 	const [selectedLecturers, setSelectedLecturers] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
 	const { alert, closeAlert, modal, openModal, closeModal } = useAlert();
 	let token = localStorage.getItem("token");
+	const itemsPerPage = 10;
 
 	useEffect(() => {
 		setLoading(true);
@@ -34,6 +37,10 @@ const Index = () => {
 	// useEffect(() => {
 	// 	console.log(selectedLecturers);
 	// }, [selectedLecturers]);
+
+	const handlePageChange = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	};
 
 	const toggleLecturerSelection = (lecturerId) => {
 		setSelectedLecturers((prevSelectedLecturers) =>
@@ -76,7 +83,7 @@ const Index = () => {
 	));
 
 	if (!loading && lecturers.length === 0) return <h3>There are no courses!</h3>;
-	const lecturerList = lecturers.map((lecturer) => {
+	const lecturerList = lecturers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((lecturer) => {
 		return (
 			<>
 				{authenticated ? (
@@ -185,6 +192,11 @@ const Index = () => {
 							{loading ? courseSkeletons : lecturerList}
 						</tbody>
 					</table>
+					<Pagination
+						currentPage={currentPage}
+						handlePageChange={handlePageChange}
+						maxPage={lecturers.length / itemsPerPage}
+					/>
 				</section>
 			</main>
 		</>

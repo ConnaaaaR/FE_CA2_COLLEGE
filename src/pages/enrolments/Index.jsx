@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import SkeletonRow from "../../components/SkeletonRow";
 import AlertBanner from "../../components/AlertBanner";
+import Pagination from "../../components/Pagination";
 
 const Index = () => {
 	const { alert, closeAlert } = useAlert();
@@ -14,6 +15,8 @@ const Index = () => {
 	const [selectedEnrolments, setSelectedEnrolments] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 10;
 
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
@@ -31,6 +34,22 @@ const Index = () => {
 				setLoading(false);
 			});
 	}, []);
+
+	const handlePageChange = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	};
+
+	const handleSortOrderChange = (order) => {
+		setEnrolments((prevEnrolments) => {
+			return [...prevEnrolments].sort((a, b) => {
+				if (order === "asc") {
+					return a.lecturer.name.localeCompare(b.lecturer.name);
+				} else {
+					return b.lecturer.name.localeCompare(a.lecturer.name);
+				}
+			});
+		});
+	};
 
 	const toggleEnrolmentSelection = (enrolmentId) => {
 		setSelectedEnrolments((prevSelectedEnrolments) =>
@@ -70,35 +89,38 @@ const Index = () => {
 
 	if (!loading && enrolments.length === 0)
 		return <h3>There are no enrolments!</h3>;
-	const enrolmentList = enrolments.map((enrolment) => {
-		return (
-			<tr className="hover:bg-base-200" key={enrolment.id}>
-				<th>
-					<label>
-						<input
-							type="checkbox"
-							className="checkbox checkbox-info"
-							checked={selectedEnrolments.includes(enrolment.id)}
-							onChange={() => toggleEnrolmentSelection(enrolment.id)}
-						/>
-					</label>
-				</th>
-				<td>{enrolment.course.title}</td>
-				<td>{enrolment.lecturer.name}</td>
-				<td>{enrolment.status}</td>
-				<td>
-					<Link to={`/enrolment/${enrolment.id}`}>
-						<button className="btn btn-secondary btn-sm ">details</button>
-					</Link>
-				</td>
-				<td>
-					<Link to={`/enrolment/${enrolment.id}/edit`}>
-						<button className="btn btn-warning btn-sm ">edit</button>
-					</Link>
-				</td>
-			</tr>
-		);
-	});
+	const enrolmentList = enrolments
+		.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+		.map(({ id, course, lecturer, status }) => {
+			// destructuring the enrolment object heck yeah
+			return (
+				<tr className="hover:bg-base-200" key={id}>
+					<th>
+						<label>
+							<input
+								type="checkbox"
+								className="checkbox checkbox-info"
+								checked={selectedEnrolments.includes(id)}
+								onChange={() => toggleEnrolmentSelection(id)}
+							/>
+						</label>
+					</th>
+					<td>{course.title}</td>
+					<td>{lecturer.name}</td>
+					<td>{status}</td>
+					<td>
+						<Link to={`/enrolment/${id}`}>
+							<button className="btn btn-secondary btn-sm ">details</button>
+						</Link>
+					</td>
+					<td>
+						<Link to={`/enrolment/${id}/edit`}>
+							<button className="btn btn-warning btn-sm ">edit</button>
+						</Link>
+					</td>
+				</tr>
+			);
+		});
 
 	return (
 		<>
@@ -121,6 +143,26 @@ const Index = () => {
 						<button onClick={openModal} className="btn btn-error">
 							Delete Selected
 						</button>
+						<div className="dropdown">
+							<div tabIndex={0} role="button" className="btn m-1">
+								Sort by Lecturer Name
+							</div>
+							<ul
+								tabIndex={0}
+								className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+							>
+								<li>
+									<a onClick={() => handleSortOrderChange("asc")}>
+										Sort Ascending
+									</a>
+								</li>
+								<li>
+									<a onClick={() => handleSortOrderChange("desc")}>
+										Sort Descending
+									</a>
+								</li>
+							</ul>
+						</div>
 						<table className="table">
 							<thead>
 								<tr>
@@ -136,10 +178,13 @@ const Index = () => {
 							</tbody>
 						</table>
 					</div>
+					<Pagination currentPage={currentPage} handlePageChange={handlePageChange}  maxPage={enrolments.length / itemsPerPage} />
 				</section>
 			</main>
+			
 		</>
 	);
+	
 };
 
 export default Index;
