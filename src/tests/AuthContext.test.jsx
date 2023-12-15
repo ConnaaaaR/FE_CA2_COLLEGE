@@ -1,13 +1,33 @@
 import React from "react";
-import { render, act } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
+
+
+function TestComponent() {
+	const { authenticated, onAuthenticated } = useAuth();
+	return (
+		<div>
+			{authenticated ? (
+				<div data-testid="authenticated">Authenticated</div>
+			) : (
+				"Not authenticated"
+			)}
+			<button
+				data-testid="authenticate"
+				onClick={() => onAuthenticated(!authenticated, "fake_token")}
+			>
+				Toggle authentication
+			</button>
+		</div>
+	);
+}
 
 describe("AuthProvider", () => {
 	it("renders without crashing", () => {
 		render(
 			<AuthProvider>
-				<div>Test</div>
+				<TestComponent />
 			</AuthProvider>
 		);
 	});
@@ -16,100 +36,55 @@ describe("AuthProvider", () => {
 		const token = "fake_token";
 		localStorage.setItem("token", token);
 
-		let component;
-		act(() => {
-			component = render(
-				<AuthProvider>
-					<div data-testid="authenticated">Test</div>
-				</AuthProvider>
-			);
-		});
+		render(
+			<AuthProvider>
+				<TestComponent />
+			</AuthProvider>
+		);
 
-		expect(component.getByTestId("authenticated")).toBeInTheDocument();
+		expect(screen.getByTestId("authenticated")).toBeInTheDocument();
 	});
 
 	it("sets authenticated state to false if token does not exist in localStorage", () => {
 		localStorage.removeItem("token");
 
-		let component;
-		act(() => {
-			component = render(
-				<AuthProvider>
-					<div>Test</div>
-				</AuthProvider>
-			);
-		});
-
-		expect(component.container.firstChild).toBeInTheDocument();
-		expect(component.container.firstChild).toHaveTextContent("Test");
-		expect(component.container.firstChild).toMatchSnapshot();
-		expect(component.container.firstChild).not.toHaveAttribute(
-			"data-testid",
-			"authenticated"
+		render(
+			<AuthProvider>
+				<TestComponent />
+			</AuthProvider>
 		);
+
+		expect(screen.queryByTestId("authenticated")).toBeNull();
 	});
 
 	it("updates authenticated state and localStorage when onAuthenticated is called with auth=true and token", () => {
-		let component;
-		const token = "fake_token";
-		localStorage.setItem("token", token);
-		const { onAuthenticated } = useAuth();
-		act(() => {
-			component = render(
-				<AuthProvider>
-					<button
-						data-testid="authenticate"
-						onClick={() => {
-							onAuthenticated(true, token);
-						}}
-					>
-						test
-					</button>
-				</AuthProvider>
-			);
-		});
+		localStorage.removeItem("token");
 
-		// console.log(token);
-		const button = component.container.firstChild;
-		expect(button).toBeInTheDocument();
-		expect(button.textContent).toBe("test");
+		render(
+			<AuthProvider>
+				<TestComponent />
+			</AuthProvider>
+		);
 
-		act(() => {
-			button.click();
-		});
+		fireEvent.click(screen.getByTestId("authenticate"));
 
-		expect(localStorage.getItem("token")).toBe(token);
-		expect(button).toHaveAttribute("data-testid", "authenticate");
+		expect(localStorage.getItem("token")).toBe("fake_token");
+		expect(screen.getByTestId("authenticated")).toBeInTheDocument();
 	});
 
-	// it("updates authenticated state and removes token from localStorage when onAuthenticated is called with auth=false", () => {
-	// 	const token = "fake_token";
-	// 	localStorage.setItem("token", token);
+	it("updates authenticated state and removes token from localStorage when onAuthenticated is called with auth=false", () => {
+		const token = "fake_token";
+		localStorage.setItem("token", token);
 
-	// 	let component;
-	// 	act(() => {
-	// 		component = render(
-	// 			<AuthProvider>
-	// 				{({ onAuthenticated }) => (
-	// 					<button data-testid="Logout" onClick={() => onAuthenticated(false)}>
-	// 						Logout
-	// 					</button>
-	// 				)}
-	// 			</AuthProvider>
-	// 		);
-	// 	});
+		render(
+			<AuthProvider>
+				<TestComponent />
+			</AuthProvider>
+		);
 
-	// 	const button = component.getByTestId("Logout");
-	// 	expect(button).toBeInTheDocument();
+		fireEvent.click(screen.getByTestId("authenticate"));
 
-	// 	act(() => {
-	// 		component.getByText("Logout").click();
-	// 	});
-
-	// 	expect(localStorage.getItem("token")).toBeNull();
-	// 	expect(component.container.firstChild).not.toHaveAttribute(
-	// 		"data-testid",
-	// 		"authenticated"
-	// 	);
-	// });
+		expect(localStorage.getItem("token")).toBeNull();
+		expect(screen.queryByTestId("authenticated")).toBeNull();
+	});
 });
