@@ -1,5 +1,6 @@
 # CA 2 College API Project
 
+
 This project is a web application created for Front End Development CA 2. It's built using React, React-Router, DaisyUI, Tailwind CSS, Node, and Vite for efficient project bundling and development.
 
 ## Features
@@ -9,6 +10,8 @@ This project is a web application created for Front End Development CA 2. It's b
 - **Lecturer Profiles:** Manage lecturer profiles, including their personal details and associated courses.
 - **Responsive Design:** Created with DaisyUI and Tailwind, the UI is responsive, scaling to accommodate different screen sizes.
 - **Error Handling:** If a user encounters an error with the application, the error is handled elegantly and with good, visual user feedback.
+- **Sorting:** Enrollments can be sorted by the alphabetical order of the associated lecturer
+- **Pagination:** Lecturer and Enrollment indexes have pagination for improved user experience 
 - **Dynamic Interaction:** Interactive components for a smooth and dynamic user experience.
 
 ## Getting Started
@@ -60,3 +63,11 @@ npm run build
 ```
 
 This will create a `dist` folder with all the assets compiled and optimized for deployment.
+
+### Running Tests
+To run the tests included in this application, run the following command in the terminal
+
+```bash
+npm run test
+```
+This will run jest and begin the test suites.
