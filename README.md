@@ -1,5 +1,9 @@
 # CA 2 College API Project
 
+### Live Demo:
+https://college.connormattless.com/
+
+### Description
 
 This project is a web application created for Front End Development CA 2. It's built using React, React-Router, DaisyUI, Tailwind CSS, Jest, Node, and Vite for efficient project bundling and development.
 
