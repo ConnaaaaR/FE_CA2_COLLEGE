@@ -37,7 +37,7 @@ const LoginForm = () => {
 				/>
 				<h2 className="text-3xl m-0">Login</h2>
 
-				<div className="form-group">
+				<div className="form-group w-full">
 					<label className="label">
 						<span className="label-text">Email:</span>
 					</label>

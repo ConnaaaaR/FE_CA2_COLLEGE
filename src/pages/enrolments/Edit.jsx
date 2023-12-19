@@ -127,7 +127,7 @@ const Edit = () => {
 
 			<form
 				onSubmit={submitForm}
-				className="form-control mx-autow-100 max-w-md"
+				className="form-control mx-auto w-100 max-w-md"
 			>
 				<div className="form-group ">
 					<label className="label">

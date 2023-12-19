@@ -31,9 +31,9 @@ const Index = () => {
 	}, []);
 
 	// debug useEffect for seeing deletion IDs
-	useEffect(() => {
-		console.log(selectedCourses);
-	}, [selectedCourses]);
+	// useEffect(() => {
+	// 	console.log(selectedCourses);
+	// }, [selectedCourses]);
 
 	const toggleCourseSelection = (courseId) => {
 		setSelectedCourses((prevSelectedCourses) =>

@@ -68,7 +68,7 @@ const RegisterForm = () => {
 						width="50%"
 					/>
 					<h2 className="text-3xl m-0">Register New Account</h2>
-					<div className="form-group">
+					<div className="form-group w-full">
 						<label className="label">
 							<span className="label-text">Name:</span>
 						</label>

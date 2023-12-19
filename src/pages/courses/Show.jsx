@@ -98,7 +98,6 @@ const Show = () => {
 						<table className="table w-full">
 							<thead>
 								<tr>
-									<th>Select</th>
 									<th>Enrolment Id</th>
 									<th>Created At</th>
 									<th>Status</th>
@@ -111,7 +110,6 @@ const Show = () => {
 										enrolment={enrolment}
 										isAuthenticated={authenticated}
 										course={course}
-										
 									/>
 								))}
 							</tbody>
