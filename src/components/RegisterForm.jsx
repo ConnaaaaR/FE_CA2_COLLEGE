@@ -20,10 +20,12 @@ const RegisterForm = () => {
 
 	const sendForm = () => {
 		console.log(form);
-		// if (form.password !== form.confirmPassword) {
-		// 	setError("Passwords Do Not Match!");
-		// 	return;
-		// }
+		if (form.password !== form.confirmPassword) {
+			setError("Passwords Do Not Match!");
+			showAlert("error", "Passwords Do Not Match!");
+			return;
+		}
+
 		axios
 			.post("/register", form)
 			.then((res) => {
